@@ -2,10 +2,13 @@
 
 import express                      from 'express';
 
-let app                             = express();
+const app                           = express();
+const port                          = 4000;
+
+app.use( express.static('public') );
 
 app.get('*', (req, res) => {
-    res.send('ok');
+    res.sendfile('./public/index.html');
 });
 
-app.listen(4000);
+app.listen(port, () => console.log(`Listening on ${port} port`));

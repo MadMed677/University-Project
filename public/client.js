@@ -62,11 +62,7 @@
 
 	var _srcMainComponentsMainJs2 = _interopRequireDefault(_srcMainComponentsMainJs);
 
-	(0, _reactDom2['default'])(_react2['default'].createElement(
-	    _reactRouter.Router,
-	    null,
-	    _react2['default'].createElement(_reactRouter.Route, { path: '/', component: _srcMainComponentsMainJs2['default'] })
-	), document.getElementById('root'));
+	_reactDom2['default'].render(_react2['default'].createElement(_srcMainComponentsMainJs2['default'], null), document.getElementById('root'));
 
 /***/ },
 /* 1 */

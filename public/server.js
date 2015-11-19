@@ -53,12 +53,17 @@
 	var _express2 = _interopRequireDefault(_express);
 
 	var app = (0, _express2['default'])();
+	var port = 4000;
+
+	app.use(_express2['default']['static']('public'));
 
 	app.get('*', function (req, res) {
-	    res.send('ok');
+	    res.sendfile('./public/index.html');
 	});
 
-	app.listen(4000);
+	app.listen(port, function () {
+	    return console.log('Listening on ' + port + ' port');
+	});
 
 /***/ },
 /* 1 */

@@ -35,7 +35,7 @@ module.exports = [
     {
         name: 'client',
         entry: './client/app.js',
-        // target: 'web', // by default
+         target: 'web', // by default
         output: {
             path: __dirname + '/public',
             filename: 'client.js'
