@@ -12,10 +12,14 @@
     "babel-core": "^5.8.34",
     "babel-loader": "^5.4.0",
     "jsx-loader": "^0.13.2",
-    "webpack": "^1.12.6"
+    "webpack": "^1.12.6",
+    "webpack-dev-server": "^1.12.1"
   },
   "dependencies": {
     "express": "^4.13.3",
-    "react": "^0.14.3"
+    "history": "^1.13.1",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-router": "^1.0.0"
   }
 }
