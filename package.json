@@ -3,7 +3,11 @@
   "devDependencies": {
     "babel-core": "^5.8.34",
     "babel-loader": "^5.4.0",
+    "browser-sync": "^2.10.0",
+    "browser-sync-webpack-plugin": "^1.0.1",
+    "connect-modrewrite": "^0.8.2",
     "gulp": "^3.8.8",
+    "raw-loader": "^0.5.1",
     "webpack": "^1.12.8"
   },
   "dependencies": {
