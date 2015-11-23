@@ -1,54 +1,20 @@
-var webpack                 = require('webpack');
-var path                    = require('path');
-var fs                      = require('fs');
+//var browserSync             = require('browser-sync-webpack-plugin');
+//var modRewrite              = require('connect-modrewrite');
 
-var nodeModules = {};
-fs.readdirSync('node_modules')
-    .filter(function(x) {
-        return ['.bin'].indexOf(x) === -1;
-    })
-    .forEach(function(mod) {
-        nodeModules[mod] = 'commonjs ' + mod;
-    });
-
-
-module.exports = [
-    {
-        name: 'server',
-        entry: './server/server.js',
-        target: 'node',
-        output: {
-            path: __dirname + '/public',
-            filename: 'server.js'
-        },
-        module: {
-            loaders: [
-                {
-                    test: /\.js$/,
-                    loaders: ['babel'],
-                    exclude: /node_modules/
-                }
-            ]
-        },
-        externals: nodeModules
+module.exports = {
+    context: __dirname + '/src/js',
+    entry: './app.js',
+    output: {
+        path: __dirname + '/public/js/',
+        filename: 'app.js'
     },
-    {
-        name: 'client',
-        entry: './client/app.js',
-         target: 'web', // by default
-        output: {
-            path: __dirname + '/public',
-            filename: 'client.js'
-        },
 
-        module: {
-            loaders: [
-                {
-                    test: /\.js$/,
-                    loaders: ['jsx', 'babel'],
-                    exclude: /node_modules/
-                }
-            ]
-        }
-    }
-];
+    module: {
+        loaders: [
+            { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
+            { test: /\.html$/, loader: 'raw', exclude: /node_modules/ }
+        ]
+    },
+
+    devtool: 'sourse-map'
+};

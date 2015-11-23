@@ -15,11 +15,22 @@
     "webpack": "^1.12.6",
     "webpack-dev-server": "^1.12.1"
   },
+  "private": true,
+  "devDependencies": {
+    "babel-core": "^5.8.34",
+    "babel-loader": "^5.4.0",
+    "browser-sync": "^2.10.0",
+    "browser-sync-webpack-plugin": "^1.0.1",
+    "connect-modrewrite": "^0.8.2",
+    "gulp": "^3.8.8",
+    "raw-loader": "^0.5.1",
+    "webpack": "^1.12.8"
+  },
   "dependencies": {
-    "express": "^4.13.3",
-    "history": "^1.13.1",
-    "react": "^0.14.3",
-    "react-dom": "^0.14.3",
-    "react-router": "^1.0.0"
+    "angular": "^1.4.8",
+    "angular-resource": "^1.4.8",
+    "angular-ui-router": "^0.2.15",
+    "bootstrap-sass": "^3.0.0",
+    "laravel-elixir": "^3.0.0"
   }
 }
