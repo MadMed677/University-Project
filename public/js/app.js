@@ -33534,7 +33534,7 @@
 /* 7 */
 /***/ function(module, exports) {
 
-	module.exports = "<div>Hello world</div>"
+	module.exports = "<div class=\"container\">\n    <p>Hello world</p>\n</div>"
 
 /***/ }
 /******/ ]);

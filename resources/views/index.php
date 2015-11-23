@@ -8,10 +8,8 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>Hi</h1>
-        <ui-view></ui-view>
-    </div>
+    <h1>Hi</h1>
+    <ui-view></ui-view>
 
     <script src="js/app.js"></script>
 </body>
