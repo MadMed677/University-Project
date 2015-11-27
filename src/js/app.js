@@ -19,4 +19,16 @@ ngModule.config( ($stateProvider, $locationProvider, $httpProvider) => {
             controller: ('IndexCtrl'),
             template: require('./templates/index.html')
         })
+
+        .state('auth', {
+            url: '/auth',
+            abstract: true,
+            template: '<ui-view>'
+        })
+
+        .state('auth.login', {
+            url: '/login',
+            template: require('./templates/login.html'),
+            data: { noLogin: true }
+        })
 })

@@ -67,6 +67,14 @@
 	        url: '/',
 	        controller: 'IndexCtrl',
 	        template: __webpack_require__(7)
+	    }).state('auth', {
+	        url: '/auth',
+	        abstract: true,
+	        template: '<ui-view>'
+	    }).state('auth.login', {
+	        url: '/login',
+	        template: __webpack_require__(8),
+	        data: { noLogin: true }
 	    });
 	});
 
@@ -33506,7 +33514,7 @@
 
 	exports['default'] = function (ngModule) {
 	    return ngModule.controller('BodyCtrl', function ($scope) {
-	        $scope.name = 'some name';
+	        console.log('this is body ctrl');
 	    });
 	};
 
@@ -33535,6 +33543,12 @@
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"container\">\n    <p>Hello world</p>\n</div>"
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"container\">\n    <h1>This is login page</h1>\n</div>"
 
 /***/ }
 /******/ ]);

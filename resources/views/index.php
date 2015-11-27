@@ -6,7 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
-<body>
+<body ng-controller="BodyCtrl">
 
     <h1>Hi</h1>
     <ui-view></ui-view>
