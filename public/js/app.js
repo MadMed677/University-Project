@@ -47010,7 +47010,7 @@
 /* 20 */
 /***/ function(module, exports) {
 
-	module.exports = "<div>Navigation</div>"
+	module.exports = "<nav class=\"navbar navbar-default\">\n    <div class=\"container\">\n        <div class=\"navbar-header\">\n            <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\">\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n            <a href class=\"navbar-brand\" ui-sref=\"index\">Brand</a>\n        </div>\n\n        <div class=\"collapse navbar-collapse\" id=\"navbar\">\n            <ul class=\"nav navbar-nav\">\n                <li ui-sref-active=\"active\"><a href ui-sref=\"index\">Home</a></li>\n                <li ui-sref-active=\"active\"><a href ui-sref=\"auth.login\">Login</a></li>\n                <li ui-sref-active=\"active\"><a href ui-sref=\"auth.register\">Register</a></li>\n            </ul>\n        </div>\n    </div>\n</nav>"
 
 /***/ }
 /******/ ]);
