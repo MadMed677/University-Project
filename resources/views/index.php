@@ -8,7 +8,7 @@
 </head>
 <body ng-controller="BodyCtrl">
 
-    <h1>Hi</h1>
+    <navigation></navigation>
     <ui-view></ui-view>
 
     <script src="js/app.js"></script>
