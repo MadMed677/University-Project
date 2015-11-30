@@ -23,7 +23,7 @@ class Activity extends Model
     }
 
     public function category() {
-        return $this->belongsTo('App\Caterory');
+        return $this->belongsTo('App\Category');
     }
 
     public function location() {
