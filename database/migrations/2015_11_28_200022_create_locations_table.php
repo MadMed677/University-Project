@@ -12,7 +12,7 @@ class CreateLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('a', function (Blueprint $table) {
+        Schema::create('locations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
             $table->double('latitude', 8, 6);
