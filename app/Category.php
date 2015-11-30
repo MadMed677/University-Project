@@ -16,7 +16,9 @@ class Category extends Model
      * What user can change in "Category" model
      *
      */
-    protected $fillable = [
-        'title'
-    ];
+    protected $fillable = ['title'];
+
+    public function activities() {
+        return $this->hasMany('App\Activity');
+    }
 }
