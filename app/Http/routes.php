@@ -12,6 +12,7 @@
 */
 
 Route::get('/', function () { return view('index'); });
+Route::resource('/api/v1/activities', 'ActivityController');
 
 Route::controllers([
     'auth' => 'Auth\AuthController',

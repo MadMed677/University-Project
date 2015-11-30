@@ -1,3 +1,39 @@
- <div class="container">
-    <p>Hello world</p>
-</div>
+<section class="content-header">
+    <h1>Productivity <small>people list</small></h1>
+</section>
+
+<section class="content">
+    <div class="col-md-4" ng-repeat="activity in activities">
+        <div class="box box-widget widget-user">
+            <div class="widget-user-header bg-black" style="background: url('https://almsaeedstudio.com/themes/AdminLTE/dist/img/photo1.png') center center;">
+                <h3 class="widget-user-username">{{ activity.category['title'] }}</h3>
+                <h5 class="widget-user-desc">Hours working: <strong>{{ activity.hours }} / 24</strong></h5>
+            </div>
+            <div class="widget-user-image">
+                <img class="img-circle" src="https://almsaeedstudio.com/themes/AdminLTE/dist/img/user3-128x128.jpg" alt="User Avatar">
+            </div>
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-sm-4 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header">{{ activity.date | date: 'dd/MMM/yyyy' }}</h5>
+                            <span class="description-text">Date</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header">{{ activity.tags.length }}</h5>
+                            <span class="description-text">Tags</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="description-block">
+                            <h5 class="description-header">{{ activity.user['name'] }}</h5>
+                            <span class="description-text">User</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

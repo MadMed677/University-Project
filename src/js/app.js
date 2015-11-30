@@ -13,7 +13,7 @@ const ngModule                  = angular.module('university', [
 
 ngModule.config( ($stateProvider, $locationProvider, $httpProvider) => {
 
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode('!');
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
     //delete $httpProvider.defaults.headers.common['X-Requested-With'];
 

@@ -1,7 +1,6 @@
 {
   "name": "university",
   "version": "1.0.0",
-  "description": "",
   "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +13,10 @@
     "browser-sync": "^2.10.0",
     "browser-sync-webpack-plugin": "^1.0.1",
     "connect-modrewrite": "^0.8.2",
-    "gulp": "^3.8.8",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-order": "^1.1.1",
+    "gulp-stylus": "^2.1.0",
     "raw-loader": "^0.5.1",
     "webpack": "^1.12.8"
   },
@@ -27,5 +29,17 @@
     "laravel-elixir": "^3.0.0",
     "lodash": "^3.10.1",
     "ngstorage": "^0.3.10"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MadMed677/University-Project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MadMed677/University-Project/issues"
+  },
+  "homepage": "https://github.com/MadMed677/University-Project",
+  "description": ""
 }

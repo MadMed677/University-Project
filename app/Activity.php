@@ -36,4 +36,8 @@ class Activity extends Model
     public function tags() {
         return $this->belongsToMany('App\Tag')->withTimestamps();
     }
+
+    public function getTagListAttribute() {
+        $this->tags->lists('id');
+    }
 }
