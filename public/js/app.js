@@ -34480,7 +34480,11 @@
 
 	exports['default'] = function (ngModule) {
 	    return ngModule.controller('IndexCtrl', function ($scope, ActivitiesFactory) {
-	        console.log('activities: ', ActivitiesFactory.all());
+
+	        $scope.activities = [];
+	        ActivitiesFactory.all().then(function (activities) {
+	            $scope.activities = activities;
+	        });
 	    });
 	};
 
@@ -34549,7 +34553,7 @@
 /* 13 */
 /***/ function(module, exports) {
 
-	module.exports = "<aside class=\"main-sidebar\">\n    <!-- sidebar: style can be found in sidebar.less -->\n    <section class=\"sidebar\">\n        <!-- sidebar menu: : style can be found in sidebar.less -->\n        <ul class=\"sidebar-menu\">\n            <li class=\"header\">Главное меню</li>\n\n            <li ui-sref-active=\"active\"><a href ui-sref=\"index\"><i class=\"fa fa-home\"></i> <span>Главная</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"auth.login\"><i class=\"fa fa-user\"></i> <span>Моя страница</span></a></li>\n        </ul>\n    </section>\n    <!-- /.sidebar -->\n</aside>"
+	module.exports = "<aside class=\"main-sidebar\">\n    <section class=\"sidebar\">\n        <ul class=\"sidebar-menu\">\n            <li class=\"header\">Главное меню</li>\n\n            <li ui-sref-active=\"active\"><a href ui-sref=\"index\"><i class=\"fa fa-home\"></i> <span>Главная</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"auth.login\"><i class=\"fa fa-user\"></i> <span>Моя страница</span></a></li>\n        </ul>\n    </section>\n</aside>"
 
 /***/ },
 /* 14 */
@@ -47005,7 +47009,7 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Hello world</h1>\n</section>\n\n<section class=\"content\">\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad alias aliquid aspernatur autem dicta doloribus eius eos est exercitationem facilis, impedit in inventore iure libero magnam, magni mollitia necessitatibus nemo obcaecati officiis quas qui quia ratione reprehenderit sed vero voluptas voluptatibus. Aliquid eius eligendi exercitationem optio porro sequi sint ut?</p>\n</section>"
+	module.exports = "<section class=\"content-header\">\n    <h1>Productivity <small>people list</small></h1>\n</section>\n\n<section class=\"content\">\n    <div class=\"col-md-4\" ng-repeat=\"activity in activities\">\n        <div class=\"box box-widget widget-user\">\n            <div class=\"widget-user-header bg-black\" style=\"background: url('https://almsaeedstudio.com/themes/AdminLTE/dist/img/photo1.png') center center;\">\n                <h3 class=\"widget-user-username\">{{ activity.category['title'] }}</h3>\n                <h5 class=\"widget-user-desc\">Hours working: <strong>{{ activity.hours }} / 24</strong></h5>\n            </div>\n            <div class=\"widget-user-image\">\n                <img class=\"img-circle\" src=\"https://almsaeedstudio.com/themes/AdminLTE/dist/img/user3-128x128.jpg\" alt=\"User Avatar\">\n            </div>\n            <div class=\"box-footer\">\n                <div class=\"row\">\n                    <div class=\"col-sm-4 border-right\">\n                        <div class=\"description-block\">\n                            <h5 class=\"description-header\">{{ activity.date | date: 'dd/MMM/yyyy' }}</h5>\n                            <span class=\"description-text\">Date</span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 border-right\">\n                        <div class=\"description-block\">\n                            <h5 class=\"description-header\">{{ activity.tags.length }}</h5>\n                            <span class=\"description-text\">Tags</span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4\">\n                        <div class=\"description-block\">\n                            <h5 class=\"description-header\">{{ activity.user['name'] }}</h5>\n                            <span class=\"description-text\">User</span>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</section>"
 
 /***/ },
 /* 19 */
@@ -47058,16 +47062,137 @@
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
+	var _helpers_apiJs = __webpack_require__(23);
+
+	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
+
 	exports['default'] = function (ngModule) {
-	    return ngModule.factory('ActivitiesFactory', function (SessionService) {
+	    return ngModule.factory('ActivitiesFactory', function (SessionService, $http, $q) {
+	        var url = 'api/v1/activities';
+
 	        return {
 	            all: function all() {
-	                return 'hello';
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: '' + url
+	                });
+
+	                // Ждем, когда придут данные
+	                request.then(function (data) {
+	                    // Если все ok
+	                    if (data.status == 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
 	            }
 	        };
 	    });
 	};
 
+	module.exports = exports['default'];
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _lodash = __webpack_require__(16);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _settingsJs = __webpack_require__(24);
+
+	var _settingsJs2 = _interopRequireDefault(_settingsJs);
+
+	var Request = (function () {
+	    function Request(params, $resource) {
+	        var _this = this;
+
+	        _classCallCheck(this, Request);
+
+	        this.url = params.url;
+	        this.method = params.method || 'get';
+	        this.param = params.param || {};
+	        this.body = params.body || {};
+	        this.methods = params.methods || {};
+	        this.$resource = $resource(_settingsJs2['default'].baseURL + this.url, this.param, this.methods);
+
+	        _lodash2['default'].each(this.methods, function (method, key) {
+	            _lodash2['default'].assign(method, _this.commonMethods());
+	            _this[key] = _this.$resource[key];
+	        });
+	    }
+
+	    _createClass(Request, [{
+	        key: 'commonMethods',
+	        value: function commonMethods() {
+	            return {
+	                method: 'get',
+	                headers: { 'Access-token': 'cf13cf1c287fc0cf5285' }
+	            };
+	        }
+	    }], [{
+	        key: 'http',
+	        value: function http(params) {
+	            if (params.params) params.params = '?' + $.param(params.params);else params.params = '';
+
+	            var deffered = new Promise(function (resolve, reject) {
+	                $.ajax(_settingsJs2['default'].baseURL + params.url + params.params, {
+	                    type: params.method,
+	                    data: params.body,
+	                    headers: {},
+	                    xhrFields: { withCredentials: true },
+	                    crossDomain: true,
+	                    success: function success(res, status, params) {
+	                        //console.log('res: ', res);
+	                        var result = { data: res, status: params.status };
+	                        //console.log('res jQuery: ', result);
+	                        resolve(result);
+	                    },
+	                    error: function error(_error) {
+	                        return reject(_error);
+	                    }
+	                });
+	            });
+
+	            return deffered;
+	        }
+	    }]);
+
+	    return Request;
+	})();
+
+	exports['default'] = Request;
+	module.exports = exports['default'];
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	exports['default'] = {
+	    baseURL: '/'
+	};
 	module.exports = exports['default'];
 
 /***/ }

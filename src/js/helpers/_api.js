@@ -27,9 +27,7 @@ export default class Request {
         };
     }
 
-    static http(params, $http) {
-        $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-
+    static http(params) {
         if ( params.params ) params.params = `?${$.param(params.params)}`;
         else params.params = '';
 
