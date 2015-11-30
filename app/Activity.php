@@ -16,11 +16,17 @@ class Activity extends Model
      * What user can change in "Category" model
      *
      */
-    protected $fillable = [
-        'title'
-    ];
+    protected $fillable = ['title'];
 
     public function user() {
         return $this->belongsTo('App\User');
+    }
+
+    public function category() {
+        return $this->belongsTo('App\Caterory');
+    }
+
+    public function location() {
+        return $this->belongsTo('App\Location');
     }
 }
