@@ -1,4 +1,4 @@
 export default (ngModule) =>
-    ngModule.controller('IndexCtrl', ($scope) => {
-        console.log('Index Ctrl');
+    ngModule.controller('IndexCtrl', ($scope, ActivitiesFactory) => {
+        console.log( 'activities: ', ActivitiesFactory.all() );
     });
