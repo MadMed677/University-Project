@@ -17,6 +17,22 @@ class CreateTagsTable extends Migration
             $table->string('title');
             $table->timestamps();
         });
+
+        // tags and user_activities
+        Schema::create('activity_tag', function(Blueprint $table) {
+            $table->integer('activity_id')->unsigned()->index();
+            $table->integer('tag_id')->unsigned()->index();
+            $table->timestamps();
+
+            $table->foreign('activity_id')
+                  ->references('id')
+                  ->on('user_activities')
+                  ->onDelete('cascade');
+            $table->foreign('tag_id')
+                  ->references('id')
+                  ->on('tags')
+                  ->onDelete('cascade');
+        });
     }
 
     /**
@@ -27,5 +43,6 @@ class CreateTagsTable extends Migration
     public function down()
     {
         Schema::drop('tags');
+        Schema::drop('activity_tag');
     }
 }

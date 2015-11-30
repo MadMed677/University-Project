@@ -16,8 +16,11 @@ class Activity extends Model
      * What user can change in "Category" model
      *
      */
-    protected $fillable = ['title'];
+    protected $fillable = ['date', 'hours', 'user_id', 'location_id', 'category_id'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user() {
         return $this->belongsTo('App\User');
     }
@@ -28,5 +31,9 @@ class Activity extends Model
 
     public function location() {
         return $this->belongsTo('App\Location');
+    }
+
+    public function tags() {
+        return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 }
