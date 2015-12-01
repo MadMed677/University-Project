@@ -1,9 +1,11 @@
 import angular                  from 'angular';
 import 'ngstorage';
+import 'angular-bootstrap-npm';
 
 const ngModule                  = angular.module('university', [
     require('angular-ui-router'),
     require('angular-resource'),
+    'ui.bootstrap',
     'ngStorage'
 ]);
 
