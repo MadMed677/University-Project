@@ -16,7 +16,7 @@
             <ul class="nav navbar-nav">
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
-                    <a class="dropdown-toggle" ng-if="!$root.user">
+                    <a class="dropdown-toggle" ng-if="!$root.user" ng-click="showAuthModal()">
                         <img src="http://www.coachesthatmakemoney.com/images/dp.jpg" class="user-image" alt="User Image">
                         <span class="hidden-xs">Login</span>
                     </a>
@@ -51,7 +51,7 @@
                                 <a href="#" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
-                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                <a href class="btn btn-default btn-flat" ng-click="signOut()">Sign out</a>
                             </div>
                         </li>
                     </ul>
