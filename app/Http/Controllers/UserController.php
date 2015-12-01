@@ -42,8 +42,8 @@ class UserController extends Controller
         $email = $request->input('email');
         $password = $request->input('password');
 
-        if ( empty( Auth::user() ) ) {
-            if ( Auth::attempt(['login' => $login, 'password' => $password]) ) {
+        if ( !Auth::check() ) {
+            if ( Auth::attempt(['login' => $login, 'password' => $password], true) ) {
                 return Auth::user();
             } else {
                 $err = new \stdClass();

@@ -14,12 +14,20 @@ export default (ngModule) =>
                     url: `${url}`
                 });
 
-                // Ждем, когда придут данные
+                // Wait until data is loaded
                 request.then( (data) => {
-                    // Если все ok
+                    // If everything is all right
                     if ( data.status == 200 ) {
+                        // Save to localStorage
+                        window.localStorage.setItem('user', JSON.stringify(data));
+
+                        // Response
                         deffered.resolve(data.data);
                     } else {
+                        // Clear localStorage
+                        window.localStorage.setItem('user', "");
+
+                        // Reject
                         deffered.reject();
                     }
                 });
@@ -34,9 +42,14 @@ export default (ngModule) =>
                     url: `${url}`
                 });
 
-                // Ждем, когда придут данные
+                // Try find this user in localStorage
+                // if it fail set "GET" request to `${url}`
+                const user = JSON.parse( window.localStorage.getItem('user') );
+                if ( !_.isEmpty(user) ) { deffered.resolve(user) }
+
+                // Wait while data is going to load
                 request.then( (data) => {
-                    // Если все ok
+                    // If all ok
                     if ( data.status == 200 ) {
                         deffered.resolve(data.data);
                     } else {

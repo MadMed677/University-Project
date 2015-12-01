@@ -34468,7 +34468,7 @@
 	    return ngModule.controller('BodyCtrl', function ($scope, $rootScope, UserFactory) {
 	        $rootScope.user = null;
 
-	        UserFactory.auth({ login: 'madmed', password: 'password', email: 'madmed677@gmail.com' }).then(function (data) {
+	        UserFactory.login().then(function (data) {
 	            $rootScope.user = data;
 	        });
 	    });
@@ -55755,12 +55755,20 @@
 	                    url: '' + url
 	                });
 
-	                // Ждем, когда придут данные
+	                // Wait until data is loaded
 	                request.then(function (data) {
-	                    // Если все ok
+	                    // If everything is all right
 	                    if (data.status == 200) {
+	                        // Save to localStorage
+	                        window.localStorage.setItem('user', JSON.stringify(data));
+
+	                        // Response
 	                        deffered.resolve(data.data);
 	                    } else {
+	                        // Clear localStorage
+	                        window.localStorage.setItem('user', "");
+
+	                        // Reject
 	                        deffered.reject();
 	                    }
 	                });
@@ -55775,9 +55783,16 @@
 	                    url: '' + url
 	                });
 
-	                // Ждем, когда придут данные
+	                // Try find this user in localStorage
+	                // if it fail set "GET" request to `${url}`
+	                var user = JSON.parse(window.localStorage.getItem('user'));
+	                if (!_lodash2['default'].isEmpty(user)) {
+	                    deffered.resolve(user);
+	                }
+
+	                // Wait while data is going to load
 	                request.then(function (data) {
-	                    // Если все ok
+	                    // If all ok
 	                    if (data.status == 200) {
 	                        deffered.resolve(data.data);
 	                    } else {
