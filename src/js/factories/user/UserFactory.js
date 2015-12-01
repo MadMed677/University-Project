@@ -45,7 +45,27 @@ export default (ngModule) =>
                 // Try find this user in localStorage
                 // if it fail set "GET" request to `${url}`
                 const user = JSON.parse( window.localStorage.getItem('user') );
-                if ( !_.isEmpty(user) ) { deffered.resolve(user) }
+                if ( !user || !_.isEmpty(user) ) { deffered.resolve(user) }
+
+                // Wait while data is going to load
+                request.then( (data) => {
+                    // If all ok
+                    if ( data.status == 200 ) {
+                        deffered.resolve(data.data);
+                    } else {
+                        deffered.reject();
+                    }
+                });
+
+                return deffered.promise;
+            },
+
+            logout() {
+                const deffered = $q.defer();
+                const request = new Request.http({
+                    method: 'GET',
+                    url: `/api/v1/logout`
+                });
 
                 // Wait while data is going to load
                 request.then( (data) => {
