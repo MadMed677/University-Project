@@ -24,6 +24,12 @@ class UserController extends Controller
         return Auth::logout();
     }
 
+    public function profile() {
+        return [
+            'user' => Auth::user()
+        ];
+    }
+
     /**
      * Show the form for creating a new resource.
      *
