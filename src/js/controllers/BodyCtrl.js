@@ -5,4 +5,10 @@ export default (ngModule) =>
         UserFactory.login().then( data => {
             $rootScope.user = data;
         });
+
+        $scope.$on('user:logout', () => {
+            UserFactory.logout().then( () => {
+                $rootScope.user = null;
+            });
+        });
     });
