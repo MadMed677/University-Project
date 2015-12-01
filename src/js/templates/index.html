@@ -45,7 +45,12 @@
 </section>
 
 <script type="text/ng-template" id="myPopoverTemplate.html">
-    <div ng-repeat="tag in activeActivity.tags">
-        {{ tag.title }}
-    </div>
+    <table class="table table-striped">
+        <tbody>
+            <tr ng-repeat="tag in activeActivity.tags">
+                <td>{{ tag.title }}</td>
+                <!--<td><div class="color" ng-style="{'background': '#3c8dbc'}">#3c8dbc</div></td>-->
+            </tr>
+        </tbody>
+    </table>
 </script>
