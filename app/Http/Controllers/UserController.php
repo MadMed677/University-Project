@@ -20,6 +20,10 @@ class UserController extends Controller
         return Auth::user();
     }
 
+    public function logout() {
+        return Auth::logout();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
