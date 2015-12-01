@@ -23,6 +23,7 @@
   "private": true,
   "dependencies": {
     "angular": "^1.4.8",
+    "angular-bootstrap-npm": "^0.14.3",
     "angular-resource": "^1.4.8",
     "angular-ui-router": "^0.2.15",
     "bootstrap-sass": "^3.0.0",

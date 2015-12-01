@@ -21,7 +21,13 @@
                         </div>
                     </div>
                     <div class="col-sm-4 border-right">
-                        <div class="description-block">
+                        <div class="description-block"
+                             ng-click="selectActivity(activity)"
+                             ng-mouseenter="selectActivity(activity)"
+                             uib-popover-template="dynamicPopover.templateUrl"
+                             popover-title="{{ dynamicPopover.title }}"
+                             popover-placement="right"
+                             popover-trigger="mouseenter">
                             <h5 class="description-header">{{ activity.tags.length }}</h5>
                             <span class="description-text">Tags</span>
                         </div>
@@ -37,3 +43,9 @@
         </div>
     </div>
 </section>
+
+<script type="text/ng-template" id="myPopoverTemplate.html">
+    <div ng-repeat="tag in activeActivity.tags">
+        {{ tag.title }}
+    </div>
+</script>

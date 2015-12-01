@@ -6,4 +6,13 @@ export default (ngModule) =>
             $scope.activities = activities;
         });
 
+        $scope.dynamicPopover = {
+            templateUrl: 'myPopoverTemplate.html',
+            title: 'Tags'
+        };
+
+        $scope.selectActivity = (activity) => {
+            $scope.activeActivity = activity;
+        };
+
     });
