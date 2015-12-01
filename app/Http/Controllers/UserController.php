@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return 'get';
+        return Auth::user();
     }
 
     /**
@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return 'create';
+        //
     }
 
     /**
@@ -39,9 +39,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $login = $request->input('login');
+        $email = $request->input('email');
         $password = $request->input('password');
 
-        return Auth::attempt(['login' => $login, 'password' => $password]);
+        if ( empty( Auth::user() ) ) {
+            if ( Auth::attempt(['login' => $login, 'password' => $password]) ) {
+                return Auth::user();
+            } else {
+                $err = new \stdClass();
+                return $err->status = 400;
+            }
+        } else {
+            return Auth::user();
+        }
+
     }
 
     /**

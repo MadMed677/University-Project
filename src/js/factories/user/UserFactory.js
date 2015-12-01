@@ -25,6 +25,26 @@ export default (ngModule) =>
                 });
 
                 return deffered.promise;
+            },
+
+            login() {
+                const deffered = $q.defer();
+                const request = new Request.http({
+                    method: 'GET',
+                    url: `${url}`
+                });
+
+                // Ждем, когда придут данные
+                request.then( (data) => {
+                    // Если все ok
+                    if ( data.status == 200 ) {
+                        deffered.resolve(data.data);
+                    } else {
+                        deffered.reject();
+                    }
+                });
+
+                return deffered.promise;
             }
         };
     });
