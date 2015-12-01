@@ -3,7 +3,7 @@ import Request          from '../../helpers/_api.js';
 
 export default (ngModule) =>
     ngModule.factory('UserFactory', (SessionService, $http, $q) => {
-        const url = 'api/v1/user';
+        const url = 'api/v1/auth';
 
         return {
             auth(req) {
@@ -44,8 +44,11 @@ export default (ngModule) =>
 
                 // Try find this user in localStorage
                 // if it fail set "GET" request to `${url}`
-                const user = JSON.parse( window.localStorage.getItem('user') );
-                if ( !user || !_.isEmpty(user) ) { deffered.resolve(user) }
+                const strUser = window.localStorage.getItem('user');
+                if ( strUser ) {
+                    const user = JSON.parse(strUser);
+                    if ( !user || !_.isEmpty(user) ) { deffered.resolve(user) }
+                }
 
                 // Wait while data is going to load
                 request.then( (data) => {
@@ -64,7 +67,30 @@ export default (ngModule) =>
                 const deffered = $q.defer();
                 const request = new Request.http({
                     method: 'GET',
-                    url: `api/v1/logout`
+                    url: `api/v1/user/logout`
+                });
+
+                // Wait while data is going to load
+                request.then( (data) => {
+                    // If all ok
+
+                    window.localStorage.setItem('user', '');
+
+                    if ( data.status == 200 ) {
+                        deffered.resolve(data.data);
+                    } else {
+                        deffered.reject();
+                    }
+                });
+
+                return deffered.promise;
+            },
+
+            profile() {
+                const deffered = $q.defer();
+                const request = new Request.http({
+                    method: 'GET',
+                    url: `api/v1/user/profile`
                 });
 
                 // Wait while data is going to load

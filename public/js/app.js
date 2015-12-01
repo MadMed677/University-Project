@@ -73,6 +73,11 @@
 	        controller: 'IndexCtrl',
 	        template: __webpack_require__(25),
 	        data: { needAuth: false }
+	    }).state('profile', {
+	        url: '/profile',
+	        controller: 'ProfileCtrl',
+	        template: __webpack_require__(29),
+	        data: { needAuth: true }
 	    }).state('auth', {
 	        url: '/auth',
 	        abstract: true,
@@ -42958,6 +42963,7 @@
 	    __webpack_require__(9)(ngModule);
 	    __webpack_require__(10)(ngModule);
 	    __webpack_require__(11)(ngModule);
+	    __webpack_require__(30)(ngModule);
 	};
 
 	module.exports = exports['default'];
@@ -43086,7 +43092,7 @@
 /* 14 */
 /***/ function(module, exports) {
 
-	module.exports = "<aside class=\"main-sidebar\">\n    <section class=\"sidebar\">\n        <ul class=\"sidebar-menu\">\n            <li class=\"header\">Главное меню</li>\n\n            <li ui-sref-active=\"active\"><a href ui-sref=\"index\"><i class=\"fa fa-home\"></i> <span>Главная</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"auth.login\"><i class=\"fa fa-user\"></i> <span>Моя страница</span></a></li>\n        </ul>\n    </section>\n</aside>"
+	module.exports = "<aside class=\"main-sidebar\">\n    <section class=\"sidebar\">\n        <ul class=\"sidebar-menu\">\n            <li class=\"header\">Главное меню</li>\n\n            <li ui-sref-active=\"active\"><a href ui-sref=\"index\"><i class=\"fa fa-home\"></i> <span>Главная</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"profile\"><i class=\"fa fa-user\"></i> <span>Моя страница</span></a></li>\n        </ul>\n    </section>\n</aside>\n"
 
 /***/ },
 /* 15 */
@@ -43124,7 +43130,7 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = "<header class=\"main-header\">\n    <!-- Logo -->\n    <a href=\"index2.html\" class=\"logo\">\n        <!-- mini logo for sidebar mini 50x50 pixels -->\n        <span class=\"logo-mini\"><b>U</b>Pr</span>\n        <!-- logo for regular state and mobile devices -->\n        <span class=\"logo-lg\"><b>University</b>Project</span>\n    </a>\n    <!-- Header Navbar: style can be found in header.less -->\n    <nav class=\"navbar navbar-static-top\" role=\"navigation\">\n        <!-- Sidebar toggle button-->\n        <a href=\"#\" class=\"sidebar-toggle\" data-toggle=\"offcanvas\" role=\"button\">\n            <span class=\"sr-only\">Toggle navigation</span>\n        </a>\n        <div class=\"navbar-custom-menu\">\n            <ul class=\"nav navbar-nav\">\n                <!-- User Account: style can be found in dropdown.less -->\n                <li class=\"dropdown user user-menu\">\n                    <a class=\"dropdown-toggle\" ng-if=\"!$root.user\" ng-click=\"showAuthModal()\">\n                        <img src=\"http://www.coachesthatmakemoney.com/images/dp.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">Login</span>\n                    </a>\n                    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" ng-if=\"$root.user\">\n                        <img src=\"../img/user2-160x160.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">{{ $root.user['name'] }}</span>\n                    </a>\n                    <ul class=\"dropdown-menu\">\n                        <!-- User image -->\n                        <li class=\"user-header\">\n                            <img src=\"../img/user2-160x160.jpg\" class=\"img-circle\" alt=\"User Image\">\n                            <p>\n                                {{ $root.user['name'] }}\n                                <small>{{ $root.user['login'] }}</small>\n                            </p>\n                        </li>\n                        <!-- Menu Body -->\n                        <li class=\"user-body\">\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Followers</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Sales</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Friends</a>\n                            </div>\n                        </li>\n                        <!-- Menu Footer-->\n                        <li class=\"user-footer\">\n                            <div class=\"pull-left\">\n                                <a href=\"#\" class=\"btn btn-default btn-flat\">Profile</a>\n                            </div>\n                            <div class=\"pull-right\">\n                                <a href class=\"btn btn-default btn-flat\" ng-click=\"signOut()\">Sign out</a>\n                            </div>\n                        </li>\n                    </ul>\n                </li>\n            </ul>\n        </div>\n    </nav>\n</header>\n"
+	module.exports = "<header class=\"main-header\">\n    <!-- Logo -->\n    <a href=\"index2.html\" class=\"logo\">\n        <!-- mini logo for sidebar mini 50x50 pixels -->\n        <span class=\"logo-mini\"><b>U</b>Pr</span>\n        <!-- logo for regular state and mobile devices -->\n        <span class=\"logo-lg\"><b>University</b>Project</span>\n    </a>\n    <!-- Header Navbar: style can be found in header.less -->\n    <nav class=\"navbar navbar-static-top\" role=\"navigation\">\n        <!-- Sidebar toggle button-->\n        <a href=\"#\" class=\"sidebar-toggle\" data-toggle=\"offcanvas\" role=\"button\">\n            <span class=\"sr-only\">Toggle navigation</span>\n        </a>\n        <div class=\"navbar-custom-menu\">\n            <ul class=\"nav navbar-nav\">\n                <!-- User Account: style can be found in dropdown.less -->\n                <li class=\"dropdown user user-menu\">\n                    <a class=\"dropdown-toggle\" ng-if=\"!$root.user\" ng-click=\"showAuthModal()\">\n                        <img src=\"http://www.coachesthatmakemoney.com/images/dp.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">Login</span>\n                    </a>\n                    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" ng-if=\"$root.user\">\n                        <img src=\"../img/user2-160x160.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">{{ $root.user['name'] }}</span>\n                    </a>\n                    <ul class=\"dropdown-menu\">\n                        <!-- User image -->\n                        <li class=\"user-header\">\n                            <img src=\"../img/user2-160x160.jpg\" class=\"img-circle\" alt=\"User Image\">\n                            <p>\n                                {{ $root.user['name'] }}\n                                <small>{{ $root.user['login'] }}</small>\n                            </p>\n                        </li>\n                        <!-- Menu Body -->\n                        <li class=\"user-body\">\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Followers</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Sales</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Friends</a>\n                            </div>\n                        </li>\n                        <!-- Menu Footer-->\n                        <li class=\"user-footer\">\n                            <div class=\"pull-left\">\n                                <a href ui-sref=\"profile\" class=\"btn btn-default btn-flat\">Profile</a>\n                            </div>\n                            <div class=\"pull-right\">\n                                <a href class=\"btn btn-default btn-flat\" ng-click=\"signOut()\">Sign out</a>\n                            </div>\n                        </li>\n                    </ul>\n                </li>\n            </ul>\n        </div>\n    </nav>\n</header>\n"
 
 /***/ },
 /* 17 */
@@ -43173,28 +43179,27 @@
 	                    if (!_lodash2['default'].isUndefined(toState.data) && toState.data.needAuth) {
 	                        console.log('Need Auth');
 	                        /**
-	                         * действия до входа БЕЗ авторизации
+	                         * действия для входа БЕЗ авторизации
 	                         */
 
-	                        event.preventDefault();
-	                        $scope.$state.go('auth.login');
+	                        var strUser = window.localStorage.getItem('user');
+	                        if (strUser) {
+	                            if (!JSON.parse(strUser)) {
+	                                /**
+	                                 * Пользователь не авторизован
+	                                 */
+	                                event.preventDefault();
+	                                $scope.$state.go('auth.login');
+	                            }
+	                        } else {
+	                            event.preventDefault();
+	                            $scope.$state.go('auth.login');
+	                        }
 	                    } else {
 	                        console.log('No Need Auth');
 	                        /**
 	                         * Вход С авторизацией
 	                         */
-
-	                        if ($sessionStorage.user) {
-	                            $scope.$root.user = $sessionStorage.user;
-	                        } else {
-	                            /**
-	                             * если пользователь НЕ авторизован
-	                             * отправляем на страницу авторизации
-	                             */
-
-	                            //event.preventDefault();
-	                            //$scope.$state.go('auth.login');
-	                        }
 	                    }
 	                }
 	            }
@@ -55600,7 +55605,7 @@
 
 	exports['default'] = function (ngModule) {
 	    return ngModule.factory('UserFactory', function (SessionService, $http, $q) {
-	        var url = 'api/v1/user';
+	        var url = 'api/v1/auth';
 
 	        return {
 	            auth: function auth(req) {
@@ -55641,9 +55646,12 @@
 
 	                // Try find this user in localStorage
 	                // if it fail set "GET" request to `${url}`
-	                var user = JSON.parse(window.localStorage.getItem('user'));
-	                if (!user || !_lodash2['default'].isEmpty(user)) {
-	                    deffered.resolve(user);
+	                var strUser = window.localStorage.getItem('user');
+	                if (strUser) {
+	                    var user = JSON.parse(strUser);
+	                    if (!user || !_lodash2['default'].isEmpty(user)) {
+	                        deffered.resolve(user);
+	                    }
 	                }
 
 	                // Wait while data is going to load
@@ -55663,7 +55671,30 @@
 	                var deffered = $q.defer();
 	                var request = new _helpers_apiJs2['default'].http({
 	                    method: 'GET',
-	                    url: 'api/v1/logout'
+	                    url: 'api/v1/user/logout'
+	                });
+
+	                // Wait while data is going to load
+	                request.then(function (data) {
+	                    // If all ok
+
+	                    window.localStorage.setItem('user', '');
+
+	                    if (data.status == 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            },
+
+	            profile: function profile() {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: 'api/v1/user/profile'
 	                });
 
 	                // Wait while data is going to load
@@ -55883,6 +55914,33 @@
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\" id=\"myModal\">\n  <div class=\"modal-dialog\">\n\t<div class=\"modal-content\">\n\t  <div class=\"modal-header\">\n\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n\t\t<h4 class=\"modal-title\">Authorization</h4>\n\t  </div>\n\t  <div class=\"modal-body\">\n\t\t<form class=\"form-horizontal\" ng-submit=\"formAuthorize()\">\n\t\t    <div class=\"form-group\">\n\t\t        <label for=\"login\" class=\"col-sm-2 control-label\">Login</label>\n                <div class=\"col-sm-10\">\n                    <input type=\"text\" class=\"form-control\" id=\"login\" placeholder=\"Login field\" ng-model=\"user.login\">\n                </div>\n\t\t    </div>\n            <div class=\"form-group\">\n\t\t        <label for=\"password\" class=\"col-sm-2 control-label\">Password</label>\n                <div class=\"col-sm-10\">\n                    <input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password field\" ng-model=\"user.password\">\n                </div>\n\t\t    </div>\n\t\t</form>\n\t  </div>\n\t  <div class=\"modal-footer\">\n\t\t<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n\t\t<button type=\"submit\" class=\"btn btn-primary\" ng-click=\"formAuthorize()\">Authorize</button>\n\t  </div>\n\t</div>\n  </div>\n</div>\n"
+
+/***/ },
+/* 29 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"content-header\">\n    <h1>Header <small>header</small></h1>\n</section>\n\n<section class=\"content\">\n    <p>Content</p>\n</section>\n"
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.controller('ProfileCtrl', function ($scope, UserFactory) {
+
+	        UserFactory.profile().then(function (data) {
+	            console.log('data: ', data);
+	        });
+	    });
+	};
+
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

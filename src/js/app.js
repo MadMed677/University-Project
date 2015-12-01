@@ -27,6 +27,13 @@ ngModule.config( ($stateProvider, $locationProvider, $httpProvider) => {
             data: { needAuth: false }
         })
 
+        .state('profile', {
+            url: '/profile',
+            controller: ('ProfileCtrl'),
+            template: require('./templates/profile.html'),
+            data: { needAuth: true }
+        })
+
         .state('auth', {
             url: '/auth',
             abstract: true,
