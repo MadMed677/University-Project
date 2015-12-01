@@ -1,9 +1,11 @@
 import angular                  from 'angular';
 import 'ngstorage';
+import 'angular-bootstrap-npm';
 
 const ngModule                  = angular.module('university', [
     require('angular-ui-router'),
     require('angular-resource'),
+    'ui.bootstrap',
     'ngStorage'
 ]);
 
@@ -23,6 +25,13 @@ ngModule.config( ($stateProvider, $locationProvider, $httpProvider) => {
             controller: ('IndexCtrl'),
             template: require('./templates/index.html'),
             data: { needAuth: false }
+        })
+
+        .state('profile', {
+            url: '/profile',
+            controller: ('ProfileCtrl'),
+            template: require('./templates/profile.html'),
+            data: { needAuth: true }
         })
 
         .state('auth', {

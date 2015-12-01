@@ -13,8 +13,11 @@
 
 Route::get('/', function () { return view('index'); });
 Route::resource('/api/v1/activities', 'ActivityController');
-
-Route::controllers([
-    'auth' => 'Auth\AuthController',
-    'password' => 'Auth\PasswordController'
-]);
+Route::resource('/api/v1/auth', 'UserController');
+Route::get('/api/v1/user/logout', 'UserController@logout');
+Route::get('/api/v1/user/profile', 'UserController@profile');
+//
+// Route::controllers([
+//     'auth' => 'Auth\AuthController',
+//     'password' => 'Auth\PasswordController'
+// ]);
