@@ -51,10 +51,18 @@ class DatabaseSeeder extends Seeder
         /**
          * Create Activities
          */
-        Activity::create(['user_id' => 1, 'location_id' => 1, 'category_id' => 1, 'date' => \Carbon\Carbon::now(), 'hours' => 3]);
-        Activity::create(['user_id' => 2, 'location_id' => 2, 'category_id' => 1, 'date' => \Carbon\Carbon::now(), 'hours' => 4.5]);
-        Activity::create(['user_id' => 2, 'location_id' => 1, 'category_id' => 2, 'date' => \Carbon\Carbon::now(), 'hours' => 2]);
-        Activity::create(['user_id' => 3, 'location_id' => 3, 'category_id' => 1, 'date' => \Carbon\Carbon::now(), 'hours' => 1.5]);
+        $activity1 = Activity::create(['user_id' => 1, 'location_id' => 1, 'category_id' => 1, 'date' => \Carbon\Carbon::now(), 'hours' => 3]);
+        $activity2 = Activity::create(['user_id' => 2, 'location_id' => 2, 'category_id' => 1, 'date' => \Carbon\Carbon::now(), 'hours' => 4.5]);
+        $activity3 = Activity::create(['user_id' => 2, 'location_id' => 1, 'category_id' => 2, 'date' => \Carbon\Carbon::now(), 'hours' => 2]);
+        $activity4 = Activity::create(['user_id' => 3, 'location_id' => 3, 'category_id' => 1, 'date' => \Carbon\Carbon::now(), 'hours' => 1.5]);
+
+        /**
+         * Attach tags to activities
+         */
+        $activity1->tags()->attach([2,3]);
+        $activity2->tags()->attach([1,3]);
+        $activity3->tags()->attach([1,2,3]);
+        $activity4->tags()->attach([1]);
 
         // $this->call(UserTableSeeder::class);
 
