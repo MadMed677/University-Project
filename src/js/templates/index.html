@@ -8,6 +8,7 @@
             <div class="widget-user-header bg-black" style="background: url('https://almsaeedstudio.com/themes/AdminLTE/dist/img/photo1.png') center center;">
                 <h3 class="widget-user-username">{{ activity.category['title'] }}</h3>
                 <h5 class="widget-user-desc">Hours working: <strong>{{ activity.hours }} / 24</strong></h5>
+                <div class="active-circle" ng-if="$root.user.login === activity.user.login"></div>
             </div>
             <div class="widget-user-image">
                 <img class="img-circle" src="https://almsaeedstudio.com/themes/AdminLTE/dist/img/user3-128x128.jpg" alt="User Avatar">
@@ -44,8 +45,15 @@
     </div>
 </section>
 
+<modal-auth></modal-auth>
+
 <script type="text/ng-template" id="myPopoverTemplate.html">
-    <div ng-repeat="tag in activeActivity.tags">
-        {{ tag.title }}
-    </div>
+    <table class="table">
+        <tbody>
+            <tr ng-repeat="tag in activeActivity.tags">
+                <td>{{ tag.title }}</td>
+                <!--<td><div class="color" ng-style="{'background': '#3c8dbc'}">#3c8dbc</div></td>-->
+            </tr>
+        </tbody>
+    </table>
 </script>
