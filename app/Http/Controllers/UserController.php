@@ -21,7 +21,10 @@ class UserController extends Controller
     }
 
     public function logout() {
-        return Auth::logout();
+        Auth::logout();
+        \Session::flush();
+
+        return 'okay';
     }
 
     /**

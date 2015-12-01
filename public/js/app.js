@@ -42977,6 +42977,7 @@
 	        $rootScope.user = null;
 
 	        UserFactory.login().then(function (data) {
+	            console.log('data: ', data);
 	            $rootScope.user = data;
 	        });
 
@@ -55616,7 +55617,7 @@
 	                    // If everything is all right
 	                    if (data.status == 200) {
 	                        // Save to localStorage
-	                        window.localStorage.setItem('user', JSON.stringify(data));
+	                        window.localStorage.setItem('user', JSON.stringify(data.data));
 
 	                        // Response
 	                        deffered.resolve(data.data);
@@ -55663,7 +55664,7 @@
 	                var deffered = $q.defer();
 	                var request = new _helpers_apiJs2['default'].http({
 	                    method: 'GET',
-	                    url: '/api/v1/logout'
+	                    url: 'api/v1/logout'
 	                });
 
 	                // Wait while data is going to load
@@ -55856,15 +55857,20 @@
 	});
 
 	exports['default'] = function (ngModule) {
-	    return ngModule.directive('modalAuth', function () {
+	    return ngModule.directive('modalAuth', function (UserFactory, $rootScope) {
 	        return {
 	            restrict: 'E',
 	            scope: {},
 	            template: __webpack_require__(28),
 	            link: function link(scope, element) {
 
+	                var modal = $('#myModal');
+
 	                scope.formAuthorize = function () {
-	                    console.log(scope.user);
+	                    UserFactory.auth(scope.user).then(function (data) {
+	                        $rootScope.user = data;
+	                        modal.modal('hide');
+	                    });
 	                };
 	            }
 	        };

@@ -19,7 +19,7 @@ export default (ngModule) =>
                     // If everything is all right
                     if ( data.status == 200 ) {
                         // Save to localStorage
-                        window.localStorage.setItem('user', JSON.stringify(data));
+                        window.localStorage.setItem('user', JSON.stringify(data.data));
 
                         // Response
                         deffered.resolve(data.data);
@@ -64,7 +64,7 @@ export default (ngModule) =>
                 const deffered = $q.defer();
                 const request = new Request.http({
                     method: 'GET',
-                    url: `/api/v1/logout`
+                    url: `api/v1/logout`
                 });
 
                 // Wait while data is going to load
