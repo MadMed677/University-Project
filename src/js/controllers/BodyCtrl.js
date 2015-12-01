@@ -3,7 +3,6 @@ export default (ngModule) =>
         $rootScope.user = null;
 
         UserFactory.login().then( data => {
-            console.log('data: ', data);
             $rootScope.user = data;
         });
 
