@@ -55919,7 +55919,7 @@
 /* 29 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Header <small>header</small></h1>\n</section>\n\n<section class=\"content\">\n    <p>Content</p>\n</section>\n"
+	module.exports = "<section class=\"content-header\">\n    <h1>Profile page</h1>\n</section>\n\n<section class=\"content\">\n    <p>Content</p>\n</section>\n"
 
 /***/ },
 /* 30 */
@@ -55934,8 +55934,10 @@
 	exports['default'] = function (ngModule) {
 	    return ngModule.controller('ProfileCtrl', function ($scope, UserFactory) {
 
+	        $scope.activities = [];
+
 	        UserFactory.profile().then(function (data) {
-	            console.log('data: ', data);
+	            $scope.activities = data.activities;
 	        });
 	    });
 	};
