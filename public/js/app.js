@@ -43156,6 +43156,8 @@
 	    __webpack_require__(21)(ngModule);
 
 	    __webpack_require__(24)(ngModule);
+
+	    __webpack_require__(35)(ngModule);
 	};
 
 	module.exports = exports['default'];
@@ -56079,7 +56081,12 @@
 	});
 
 	exports['default'] = function (ngModule) {
-	    return ngModule.controller('DashboardCtrl', function ($scope, $rootScope) {});
+	    return ngModule.controller('DashboardCtrl', function ($scope, $rootScope, DashboardFactory) {
+
+	        DashboardFactory.getDay().then(function (data) {
+	            console.log('data: ', data);
+	        });
+	    });
 	};
 
 	module.exports = exports['default'];
@@ -56089,6 +56096,85 @@
 /***/ function(module, exports) {
 
 	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n    dashboard page\n</section>\n"
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(19);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _helpers_apiJs = __webpack_require__(22);
+
+	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.factory('DashboardFactory', function ($http, $q) {
+	        var url = 'api/v1/dashboard';
+
+	        return {
+	            all: function all() {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: '' + url
+	                });
+
+	                // Ждем, когда придут данные
+	                request.then(function (data) {
+	                    // Если все ok
+	                    if (data.status === 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            },
+
+	            getDay: function getDay() {
+	                var day = arguments.length <= 0 || arguments[0] === undefined ? new Date() : arguments[0];
+
+	                var date = {
+	                    year: day.getFullYear().toString(),
+	                    month: (day.getMonth() + 1).toString(),
+	                    day: day.getDate() < 10 ? '0' + day.getDate() : day.getDate().toString()
+	                };
+
+	                var dateString = date.year + '-' + date.month + '-' + date.day;
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: url + '/' + dateString
+	                });
+
+	                // Ждем, когда придут данные
+	                request.then(function (data) {
+	                    // Если все ok
+	                    if (data.status === 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            }
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

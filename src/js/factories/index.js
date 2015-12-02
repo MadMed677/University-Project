@@ -5,4 +5,6 @@ export default ngModule => {
 
     require('./activities/Activities.js')(ngModule);
 
+    require('./dashboard/Dashboard.js')(ngModule);
+
 };
