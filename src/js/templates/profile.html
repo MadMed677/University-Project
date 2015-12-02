@@ -36,12 +36,7 @@
         </div>
         <div class="col-sm-6">
             <div class="box box-warning">
-                <div class="box-header">
-                    <h3 class="box-title">Location</h3>
-                </div>
-                <div class="box-body">
-                    {{ activeActivity.location['title'] }} {{ activeActivity.date }}
-                </div>
+                <location-directive activity="activeActivity"></location-directive>
             </div>
         </div>
     </div>

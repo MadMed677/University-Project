@@ -56,7 +56,7 @@
 
 	__webpack_require__(4);
 
-	var ngModule = _angular2['default'].module('university', [__webpack_require__(5), __webpack_require__(6), 'ymaps', 'ui.bootstrap', 'ngStorage']);
+	var ngModule = _angular2['default'].module('university', [__webpack_require__(5), __webpack_require__(6), 'ui.bootstrap', 'ngStorage']);
 
 	/* Loading Controllers */__webpack_require__(8)(ngModule);
 	/* Loading Directives */__webpack_require__(12)(ngModule);
@@ -43061,6 +43061,8 @@
 	    __webpack_require__(15)(ngModule);
 
 	    __webpack_require__(27)(ngModule);
+
+	    __webpack_require__(31)(ngModule);
 	};
 
 	module.exports = exports['default'];
@@ -55919,7 +55921,7 @@
 /* 29 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Profile page</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-sm-6\">\n            <div class=\"box box-default\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Last <strong>{{ activities.length }}</strong> user activities</h3>\n                </div>\n                <div class=\"box-body\">\n                    <ul class=\"timeline\">\n                        <li ng-repeat=\"activity in activitiesList\" ng-class=\"{ 'time-label': activity.view }\" ng-click=\"selectActive(activity)\">\n                            <span ng-if=\"activity.view\">{{ activity.date | date: 'dd/MM/yyyy' }}</span>\n\n                            <i class=\"fa fa-envelope bg-blue\" ng-if=\"!activity.view\"></i>\n                            <div class=\"timeline-item\" ng-if=\"!activity.view\">\n                                <span class=\"time\">\n                                    <i class=\"fa fa-clock-o\"></i>\n                                    {{ activity.date | date: 'dd/MM' }}\n                                </span>\n                                <h3 class=\"timeline-header\">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>\n\n                                <div class=\"timeline-body\" ng-show=\"activity.tags.length\">\n                                    <div>\n                                        <span ng-repeat=\"tag in activity.tags\" class=\"timeline-tag bg-blue\">{{ tag.title }}</span>\n                                    </div>\n                                </div>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-6\">\n            <div class=\"box box-warning\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Location</h3>\n                </div>\n                <div class=\"box-body\">\n                    {{ activeActivity.location['title'] }} {{ activeActivity.date }}\n                </div>\n            </div>\n        </div>\n    </div>\n\n</section>\n"
+	module.exports = "<section class=\"content-header\">\n    <h1>Profile page</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-sm-6\">\n            <div class=\"box box-default\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Last <strong>{{ activities.length }}</strong> user activities</h3>\n                </div>\n                <div class=\"box-body\">\n                    <ul class=\"timeline\">\n                        <li ng-repeat=\"activity in activitiesList\" ng-class=\"{ 'time-label': activity.view }\" ng-click=\"selectActive(activity)\">\n                            <span ng-if=\"activity.view\">{{ activity.date | date: 'dd/MM/yyyy' }}</span>\n\n                            <i class=\"fa fa-envelope bg-blue\" ng-if=\"!activity.view\"></i>\n                            <div class=\"timeline-item\" ng-if=\"!activity.view\">\n                                <span class=\"time\">\n                                    <i class=\"fa fa-clock-o\"></i>\n                                    {{ activity.date | date: 'dd/MM' }}\n                                </span>\n                                <h3 class=\"timeline-header\">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>\n\n                                <div class=\"timeline-body\" ng-show=\"activity.tags.length\">\n                                    <div>\n                                        <span ng-repeat=\"tag in activity.tags\" class=\"timeline-tag bg-blue\">{{ tag.title }}</span>\n                                    </div>\n                                </div>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-6\">\n            <div class=\"box box-warning\">\n                <location-directive activity=\"activeActivity\"></location-directive>\n            </div>\n        </div>\n    </div>\n\n</section>\n"
 
 /***/ },
 /* 30 */
@@ -55974,6 +55976,91 @@
 	};
 
 	module.exports = exports['default'];
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(19);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.directive('locationDirective', function ($rootScope) {
+	        return {
+	            restrict: 'E',
+	            scope: {
+	                activity: '='
+	            },
+	            template: __webpack_require__(32),
+	            link: function link(scope, element) {
+
+	                scope.location = {};
+
+	                // let map = null;
+	                // function update(center) {
+	                //     console.log('ymaps: ', ymaps);
+	                //     map = new ymaps.Map('map', {
+	                //         center: center,
+	                //         zoom: 15
+	                //     });
+	                // }
+
+	                var map = null,
+	                    placemark = null;
+	                ymaps.ready(function () {
+	                    map = new ymaps.Map('map', {
+	                        center: [0, 0],
+	                        zoom: 16,
+	                        options: {
+	                            minZoom: 16,
+	                            maxZoom: 16
+	                        },
+	                        controls: []
+	                    });
+	                });
+
+	                console.log('activity: ', scope.activity);
+	                scope.$watch('activity', function (newActivity) {
+	                    if (!_lodash2['default'].isEmpty(newActivity)) {
+	                        console.log('newActivity: ', newActivity);
+	                        console.log('location: ', scope.location);
+	                        scope.location.center = [newActivity.location.latitude, newActivity.location.longitude];
+
+	                        // Remove previous placemark
+	                        if (placemark) map.geoObjects.remove(placemark);
+	                        // Set center for new center location
+	                        map.setCenter(scope.location.center);
+
+	                        // Create new placemark
+	                        placemark = new ymaps.Placemark(scope.location.center, {
+	                            hintContent: '' + scope.activity.location.title
+	                        });
+
+	                        // Add new placemark to the map
+	                        map.geoObjects.add(placemark);
+	                    }
+	                });
+	            }
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 32 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"box-header\">\n    <h3 class=\"box-title\">Location: {{ activity.location['title'] }} {{ activity.date }}</h3>\n</div>\n<div class=\"box-body\">\n\n    <div ng-show=\"location.center\">\n        <div id=\"map\" class=\"map-container\"></div>\n    </div>\n\n</div>\n"
 
 /***/ }
 /******/ ]);

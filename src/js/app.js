@@ -5,7 +5,6 @@ import 'angular-bootstrap-npm';
 const ngModule                  = angular.module('university', [
     require('angular-ui-router'),
     require('angular-resource'),
-    'ymaps',
     'ui.bootstrap',
     'ngStorage'
 ]);
