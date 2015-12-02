@@ -5,10 +5,15 @@ export default (ngModule) =>
 
         $scope.activities = [];
         $scope.activitiesList = [];
+        $scope.activeActivity = {};
 
         UserFactory.profile().then( data => {
             $scope.activities = data.activities;
         });
+
+        $scope.selectActive = (activity) => {
+            if ( !activity.view ) $scope.activeActivity = activity;
+        };
 
         $scope.$watch('activities', (newActivities) => {
             let localActivityList = [];

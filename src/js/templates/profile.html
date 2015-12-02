@@ -8,11 +8,11 @@
         <div class="col-sm-6">
             <div class="box box-default">
                 <div class="box-header">
-                    <h3 class="box-title">Last 10 user <strong>activities</strong></h3>
+                    <h3 class="box-title">Last <strong>{{ activities.length }}</strong> user activities</h3>
                 </div>
                 <div class="box-body">
                     <ul class="timeline">
-                        <li ng-repeat="activity in activitiesList" ng-class="{ 'time-label': activity.view }">
+                        <li ng-repeat="activity in activitiesList" ng-class="{ 'time-label': activity.view }" ng-click="selectActive(activity)">
                             <span ng-if="activity.view">{{ activity.date | date: 'dd/MM/yyyy' }}</span>
 
                             <i class="fa fa-envelope bg-blue" ng-if="!activity.view"></i>
@@ -23,12 +23,24 @@
                                 </span>
                                 <h3 class="timeline-header">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>
 
-                                <div class="timeline-body">
-                                    <span ng-repeat="tag in activity.tags" class="timeline-tag bg-blue">{{ tag.title }}</span>
+                                <div class="timeline-body" ng-show="activity.tags.length">
+                                    <div>
+                                        <span ng-repeat="tag in activity.tags" class="timeline-tag bg-blue">{{ tag.title }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </li>
                     </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="box box-warning">
+                <div class="box-header">
+                    <h3 class="box-title">Location</h3>
+                </div>
+                <div class="box-body">
+                    {{ activeActivity.location['title'] }} {{ activeActivity.date }}
                 </div>
             </div>
         </div>

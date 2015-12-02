@@ -31,9 +31,7 @@ ngModule.factory('SessionService', ($injector) => {
                     console.log('No Need Auth');
                     /**
                      * Вход С авторизацией
-                     */
-
-                    
+                     */   
                 }
             }
         }
