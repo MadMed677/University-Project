@@ -24,6 +24,9 @@
     </div>
 
 
+
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-ymaps.js"></script>
     <script src="js/app.js"></script>
     <script src="js/vendor.js"></script>
 </body>

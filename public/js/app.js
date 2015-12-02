@@ -56,7 +56,7 @@
 
 	__webpack_require__(4);
 
-	var ngModule = _angular2['default'].module('university', [__webpack_require__(5), __webpack_require__(6), 'ui.bootstrap', 'ngStorage']);
+	var ngModule = _angular2['default'].module('university', [__webpack_require__(5), __webpack_require__(6), 'ymaps', 'ui.bootstrap', 'ngStorage']);
 
 	/* Loading Controllers */__webpack_require__(8)(ngModule);
 	/* Loading Directives */__webpack_require__(12)(ngModule);
