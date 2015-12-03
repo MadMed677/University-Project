@@ -30,15 +30,22 @@ class DashboardController extends Controller
 
         // Copy category object
         foreach ( $category_types as $category) {
-            $total_categories[$category->title]['category'] = $category;
-            $total_categories[$category->title]['hours'] = 0;
+            $total_categories[] = [
+                'category' => $category,
+                'hours' => 0
+            ];
         }
 
         // Calculate total hours
         foreach ( $category_types as $category ) {
             foreach ( $activity_to_date as $activity ) {
                 if ( $category->id == $activity->category_id ) {
-                    $total_categories[$category->title]['hours'] += $activity->hours;
+                    for ( $i = 0; $i < count($total_categories); $i++ ) {
+                        if ( $total_categories[$i]['category']->id == $activity->category_id ) {
+                            $total_categories[$i]['hours'] += $activity->hours;
+                            break;
+                        }
+                    }
                 }
             }
         }
