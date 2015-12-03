@@ -20,8 +20,15 @@ ngModule.config( ($stateProvider, $locationProvider, $httpProvider) => {
     //delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
     $stateProvider
-        .state('index', {
-            url: '/',
+        .state('dashboard', {
+            url: '/dashboard',
+            controller: ('DashboardCtrl'),
+            template: require('./templates/dashboard.html'),
+            data: { needAuth: true }
+        })
+
+        .state('list', {
+            url: '/list',
             controller: ('IndexCtrl'),
             template: require('./templates/index.html'),
             data: { needAuth: false }

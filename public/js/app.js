@@ -68,8 +68,13 @@
 	    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 	    //delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-	    $stateProvider.state('index', {
-	        url: '/',
+	    $stateProvider.state('dashboard', {
+	        url: '/dashboard',
+	        controller: 'DashboardCtrl',
+	        template: __webpack_require__(34),
+	        data: { needAuth: true }
+	    }).state('list', {
+	        url: '/list',
 	        controller: 'IndexCtrl',
 	        template: __webpack_require__(25),
 	        data: { needAuth: false }
@@ -42964,6 +42969,7 @@
 	    __webpack_require__(10)(ngModule);
 	    __webpack_require__(11)(ngModule);
 	    __webpack_require__(30)(ngModule);
+	    __webpack_require__(33)(ngModule);
 	};
 
 	module.exports = exports['default'];
@@ -43061,6 +43067,8 @@
 	    __webpack_require__(15)(ngModule);
 
 	    __webpack_require__(27)(ngModule);
+
+	    __webpack_require__(31)(ngModule);
 	};
 
 	module.exports = exports['default'];
@@ -43092,7 +43100,7 @@
 /* 14 */
 /***/ function(module, exports) {
 
-	module.exports = "<aside class=\"main-sidebar\">\n    <section class=\"sidebar\">\n        <ul class=\"sidebar-menu\">\n            <li class=\"header\">Главное меню</li>\n\n            <li ui-sref-active=\"active\"><a href ui-sref=\"index\"><i class=\"fa fa-home\"></i> <span>Главная</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"profile\"><i class=\"fa fa-user\"></i> <span>Моя страница</span></a></li>\n        </ul>\n    </section>\n</aside>\n"
+	module.exports = "<aside class=\"main-sidebar\">\n    <section class=\"sidebar\">\n        <ul class=\"sidebar-menu\">\n            <li class=\"header\">Главное меню</li>\n\n            <li ui-sref-active=\"active\"><a href ui-sref=\"dashboard\"><i class=\"fa fa-home\"></i> <span>Dashboard</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"list\"><i class=\"fa fa-home\"></i> <span>List</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"profile\"><i class=\"fa fa-user\"></i> <span>Profile</span></a></li>\n        </ul>\n    </section>\n</aside>\n"
 
 /***/ },
 /* 15 */
@@ -43130,7 +43138,7 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = "<header class=\"main-header\">\n    <!-- Logo -->\n    <a href=\"index2.html\" class=\"logo\">\n        <!-- mini logo for sidebar mini 50x50 pixels -->\n        <span class=\"logo-mini\"><b>U</b>Pr</span>\n        <!-- logo for regular state and mobile devices -->\n        <span class=\"logo-lg\"><b>University</b>Project</span>\n    </a>\n    <!-- Header Navbar: style can be found in header.less -->\n    <nav class=\"navbar navbar-static-top\" role=\"navigation\">\n        <!-- Sidebar toggle button-->\n        <a href=\"#\" class=\"sidebar-toggle\" data-toggle=\"offcanvas\" role=\"button\">\n            <span class=\"sr-only\">Toggle navigation</span>\n        </a>\n        <div class=\"navbar-custom-menu\">\n            <ul class=\"nav navbar-nav\">\n                <!-- User Account: style can be found in dropdown.less -->\n                <li class=\"dropdown user user-menu\">\n                    <a class=\"dropdown-toggle\" ng-if=\"!$root.user\" ng-click=\"showAuthModal()\">\n                        <img src=\"http://www.coachesthatmakemoney.com/images/dp.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">Login</span>\n                    </a>\n                    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" ng-if=\"$root.user\">\n                        <img src=\"../img/user2-160x160.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">{{ $root.user['name'] }}</span>\n                    </a>\n                    <ul class=\"dropdown-menu\">\n                        <!-- User image -->\n                        <li class=\"user-header\">\n                            <img src=\"../img/user2-160x160.jpg\" class=\"img-circle\" alt=\"User Image\">\n                            <p>\n                                {{ $root.user['name'] }}\n                                <small>{{ $root.user['login'] }}</small>\n                            </p>\n                        </li>\n                        <!-- Menu Body -->\n                        <li class=\"user-body\">\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Followers</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Sales</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Friends</a>\n                            </div>\n                        </li>\n                        <!-- Menu Footer-->\n                        <li class=\"user-footer\">\n                            <div class=\"pull-left\">\n                                <a href ui-sref=\"profile\" class=\"btn btn-default btn-flat\">Profile</a>\n                            </div>\n                            <div class=\"pull-right\">\n                                <a href class=\"btn btn-default btn-flat\" ng-click=\"signOut()\">Sign out</a>\n                            </div>\n                        </li>\n                    </ul>\n                </li>\n            </ul>\n        </div>\n    </nav>\n</header>\n"
+	module.exports = "<header class=\"main-header\">\n    <!-- Logo -->\n    <a href=\"profile\" class=\"logo\">\n        <!-- mini logo for sidebar mini 50x50 pixels -->\n        <span class=\"logo-mini\"><b>U</b>Pr</span>\n        <!-- logo for regular state and mobile devices -->\n        <span class=\"logo-lg\"><b>University</b>Project</span>\n    </a>\n    <!-- Header Navbar: style can be found in header.less -->\n    <nav class=\"navbar navbar-static-top\" role=\"navigation\">\n        <!-- Sidebar toggle button-->\n        <a href=\"#\" class=\"sidebar-toggle\" data-toggle=\"offcanvas\" role=\"button\">\n            <span class=\"sr-only\">Toggle navigation</span>\n        </a>\n        <div class=\"navbar-custom-menu\">\n            <ul class=\"nav navbar-nav\">\n                <!-- User Account: style can be found in dropdown.less -->\n                <li class=\"dropdown user user-menu\">\n                    <a class=\"dropdown-toggle\" ng-if=\"!$root.user\" ng-click=\"showAuthModal()\">\n                        <img src=\"http://www.coachesthatmakemoney.com/images/dp.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">Login</span>\n                    </a>\n                    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" ng-if=\"$root.user\">\n                        <img src=\"../img/user2-160x160.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">{{ $root.user['name'] }}</span>\n                    </a>\n                    <ul class=\"dropdown-menu\">\n                        <!-- User image -->\n                        <li class=\"user-header\">\n                            <img src=\"../img/user2-160x160.jpg\" class=\"img-circle\" alt=\"User Image\">\n                            <p>\n                                {{ $root.user['name'] }}\n                                <small>{{ $root.user['login'] }}</small>\n                            </p>\n                        </li>\n                        <!-- Menu Body -->\n                        <li class=\"user-body\">\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Followers</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Sales</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Friends</a>\n                            </div>\n                        </li>\n                        <!-- Menu Footer-->\n                        <li class=\"user-footer\">\n                            <div class=\"pull-left\">\n                                <a href ui-sref=\"profile\" class=\"btn btn-default btn-flat\">Profile</a>\n                            </div>\n                            <div class=\"pull-right\">\n                                <a href class=\"btn btn-default btn-flat\" ng-click=\"signOut()\">Sign out</a>\n                            </div>\n                        </li>\n                    </ul>\n                </li>\n            </ul>\n        </div>\n    </nav>\n</header>\n"
 
 /***/ },
 /* 17 */
@@ -55919,7 +55927,7 @@
 /* 29 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Profile page</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-sm-6\">\n            <div class=\"box box-default\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Last <strong>{{ activities.length }}</strong> user activities</h3>\n                </div>\n                <div class=\"box-body\">\n                    <ul class=\"timeline\">\n                        <li ng-repeat=\"activity in activitiesList\" ng-class=\"{ 'time-label': activity.view }\" ng-click=\"selectActive(activity)\">\n                            <span ng-if=\"activity.view\">{{ activity.date | date: 'dd/MM/yyyy' }}</span>\n\n                            <i class=\"fa fa-envelope bg-blue\" ng-if=\"!activity.view\"></i>\n                            <div class=\"timeline-item\" ng-if=\"!activity.view\">\n                                <span class=\"time\">\n                                    <i class=\"fa fa-clock-o\"></i>\n                                    {{ activity.date | date: 'dd/MM' }}\n                                </span>\n                                <h3 class=\"timeline-header\">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>\n\n                                <div class=\"timeline-body\" ng-show=\"activity.tags.length\">\n                                    <div>\n                                        <span ng-repeat=\"tag in activity.tags\" class=\"timeline-tag bg-blue\">{{ tag.title }}</span>\n                                    </div>\n                                </div>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-6\">\n            <div class=\"box box-warning\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Location</h3>\n                </div>\n                <div class=\"box-body\">\n                    {{ activeActivity.location['title'] }} {{ activeActivity.date }}\n                </div>\n            </div>\n        </div>\n    </div>\n\n</section>\n"
+	module.exports = "<section class=\"content-header\">\n    <h1>Profile page</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div ng-class=\"{ 'col-sm-6': activeActivity, 'col-sm-12': !activeActivity }\">\n            <div class=\"box box-default\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Last <strong>{{ activities.length }}</strong> user activities</h3>\n                </div>\n                <div class=\"box-body\">\n                    <ul class=\"timeline\">\n                        <li ng-repeat=\"activity in activitiesList\" ng-class=\"{ 'time-label': activity.view }\" ng-click=\"selectActive(activity)\">\n                            <span ng-if=\"activity.view\">{{ activity.date | date: 'dd/MM/yyyy' }}</span>\n\n                            <i class=\"fa fa-envelope bg-blue\" ng-if=\"!activity.view\"></i>\n                            <div class=\"timeline-item\" ng-if=\"!activity.view\">\n                                <span class=\"time\">\n                                    <i class=\"fa fa-clock-o\"></i>\n                                    {{ activity.date | date: 'dd/MM' }}\n                                </span>\n                                <h3 class=\"timeline-header\">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>\n\n                                <div class=\"timeline-body\" ng-show=\"activity.tags.length\">\n                                    <div>\n                                        <span ng-repeat=\"tag in activity.tags\" class=\"timeline-tag bg-blue\">{{ tag.title }}</span>\n                                    </div>\n                                </div>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-6\">\n            <div class=\"box box-warning\">\n                <location-directive activity=\"activeActivity\"></location-directive>\n            </div>\n        </div>\n    </div>\n\n</section>\n"
 
 /***/ },
 /* 30 */
@@ -55974,6 +55982,113 @@
 	};
 
 	module.exports = exports['default'];
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(19);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.directive('locationDirective', function ($rootScope) {
+	        return {
+	            restrict: 'E',
+	            scope: {
+	                activity: '='
+	            },
+	            template: __webpack_require__(32),
+	            link: function link(scope, element) {
+
+	                scope.location = {};
+
+	                // let map = null;
+	                // function update(center) {
+	                //     console.log('ymaps: ', ymaps);
+	                //     map = new ymaps.Map('map', {
+	                //         center: center,
+	                //         zoom: 15
+	                //     });
+	                // }
+
+	                var map = null,
+	                    placemark = null;
+	                ymaps.ready(function () {
+	                    map = new ymaps.Map('map', {
+	                        center: [0, 0],
+	                        zoom: 16,
+	                        options: {
+	                            minZoom: 16,
+	                            maxZoom: 16
+	                        },
+	                        controls: []
+	                    });
+	                });
+
+	                console.log('activity: ', scope.activity);
+	                scope.$watch('activity', function (newActivity) {
+	                    if (!_lodash2['default'].isEmpty(newActivity)) {
+	                        console.log('newActivity: ', newActivity);
+	                        console.log('location: ', scope.location);
+	                        scope.location.center = [newActivity.location.latitude, newActivity.location.longitude];
+
+	                        // Remove previous placemark
+	                        if (placemark) map.geoObjects.remove(placemark);
+	                        // Set center for new center location
+	                        map.setCenter(scope.location.center);
+
+	                        // Create new placemark
+	                        placemark = new ymaps.Placemark(scope.location.center, {
+	                            hintContent: '' + scope.activity.location.title
+	                        });
+
+	                        // Add new placemark to the map
+	                        map.geoObjects.add(placemark);
+	                    }
+	                });
+	            }
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 32 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"box-header\">\n    <h3 class=\"box-title\">Location: {{ activity.location['title'] }} {{ activity.date }}</h3>\n</div>\n<div class=\"box-body\">\n\n    <div ng-show=\"location.center\">\n        <div id=\"map\" class=\"map-container\"></div>\n    </div>\n\n</div>\n"
+
+/***/ },
+/* 33 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.controller('DashboardCtrl', function ($scope, $rootScope) {});
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 34 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n    dashboard page\n</section>\n"
 
 /***/ }
 /******/ ]);

@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/AdminLTE.min.css">
     <link rel="stylesheet" href="css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 </head>
 <body ng-controller="BodyCtrl" class="hold-transition skin-blue sidebar-mini">
 
