@@ -24,6 +24,27 @@ export default (ngModule) =>
                 });
 
                 return deffered.promise;
+            },
+
+            add(activity) {
+                const deffered = $q.defer();
+                const request = new Request.http({
+                    method: 'POST',
+                    url: `${url}`,
+                    body: activity
+                });
+
+                // Ждем, когда придут данные
+                request.then( (data) => {
+                    // Если все ok
+                    if ( data.status == 200 ) {
+                        deffered.resolve(data.data);
+                    } else {
+                        deffered.reject();
+                    }
+                });
+
+                return deffered.promise;
             }
         };
     });

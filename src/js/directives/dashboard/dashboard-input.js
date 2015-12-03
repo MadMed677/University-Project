@@ -1,7 +1,7 @@
 import _                    from 'lodash';
 
 export default (ngModule) =>
-    ngModule.directive('dashboardInput', (CategoryFactory, TagFactory, $rootScope) => {
+    ngModule.directive('dashboardInput', (CategoryFactory, TagFactory, ActivitiesFactory, $rootScope) => {
         return {
             restrict: 'E',
             scope: { activities: '=' },
@@ -13,8 +13,15 @@ export default (ngModule) =>
                 CategoryFactory.all().then( data => scope.categories = data );
 
                 scope.add = () => {
-                    console.log(scope.user);
+                    let request = { ...scope.activity };
+                    request.tags = _.pluck(request.tags, 'id');
+                    console.log('request: ', request);
+                    ActivitiesFactory.add(request).then(success);
                 };
+
+                function success(data) {
+                    console.log('data: ', data);
+                }
             }
         };
     });

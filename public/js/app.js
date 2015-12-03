@@ -81855,6 +81855,8 @@
 	    value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _lodash = __webpack_require__(13);
@@ -81862,7 +81864,7 @@
 	var _lodash2 = _interopRequireDefault(_lodash);
 
 	exports['default'] = function (ngModule) {
-	    return ngModule.directive('dashboardInput', function (CategoryFactory, TagFactory, $rootScope) {
+	    return ngModule.directive('dashboardInput', function (CategoryFactory, TagFactory, ActivitiesFactory, $rootScope) {
 	        return {
 	            restrict: 'E',
 	            scope: { activities: '=' },
@@ -81878,8 +81880,15 @@
 	                });
 
 	                scope.add = function () {
-	                    console.log(scope.user);
+	                    var request = _extends({}, scope.activity);
+	                    request.tags = _lodash2['default'].pluck(request.tags, 'id');
+	                    console.log('request: ', request);
+	                    ActivitiesFactory.add(request).then(success);
 	                };
+
+	                function success(data) {
+	                    console.log('data: ', data);
+	                }
 	            }
 	        };
 	    });
@@ -81891,7 +81900,7 @@
 /* 31 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"user.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-6\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"user.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"user.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 32 */
@@ -82234,6 +82243,27 @@
 	                var request = new _helpers_apiJs2['default'].http({
 	                    method: 'GET',
 	                    url: '' + url
+	                });
+
+	                // Ждем, когда придут данные
+	                request.then(function (data) {
+	                    // Если все ok
+	                    if (data.status == 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            },
+
+	            add: function add(activity) {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'POST',
+	                    url: '' + url,
+	                    body: activity
 	                });
 
 	                // Ждем, когда придут данные

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Activity;
+use Auth;
 
 class ActivityController extends Controller
 {
@@ -47,7 +48,23 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        $input['category'] = intval($input['category']);
+        $input['hours'] = floatval($input['hours']);
+
+//        return $input;
+        $activity = new Activity;
+        $activity->category_id = $input['category'];
+        $activity->location_id = 1;
+        $activity->user_id = Auth::id();
+        $activity->title = $input['title'];
+        $activity->hours = $input['hours'];
+        $activity->date = \Carbon\Carbon::now();
+        $activity->save();
+
+        $activity->tags()->attach($input['tags']);
+
+        return $activity;
     }
 
     /**
