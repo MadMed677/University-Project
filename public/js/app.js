@@ -81862,14 +81862,17 @@
 	var _lodash2 = _interopRequireDefault(_lodash);
 
 	exports['default'] = function (ngModule) {
-	    return ngModule.directive('dashboardInput', function (CategoryFactory, $rootScope) {
+	    return ngModule.directive('dashboardInput', function (CategoryFactory, TagFactory, $rootScope) {
 	        return {
 	            restrict: 'E',
 	            scope: { activities: '=' },
 	            template: __webpack_require__(31),
 	            link: function link(scope, element) {
-
-	                scope.tagsList = [{ id: 1, title: 'One' }, { id: 2, title: 'Two' }, { id: 3, title: 'Three' }, { id: 4, title: 'Four' }];
+	                // Get all tags
+	                TagFactory.all().then(function (data) {
+	                    return scope.tagsList = data;
+	                });
+	                // Get all categories
 	                CategoryFactory.all().then(function (data) {
 	                    return scope.categories = data;
 	                });
@@ -81906,10 +81909,9 @@
 	    __webpack_require__(34)(ngModule);
 
 	    __webpack_require__(37)(ngModule);
-
 	    __webpack_require__(38)(ngModule);
-
 	    __webpack_require__(39)(ngModule);
+	    __webpack_require__(45)(ngModule);
 	};
 
 	module.exports = exports['default'];
@@ -84337,6 +84339,56 @@
 	$templateCache.put("select2/match.tpl.html","<a class=\"select2-choice ui-select-match\" ng-class=\"{\'select2-default\': $select.isEmpty()}\" ng-click=\"$select.toggle($event)\" aria-label=\"{{ $select.baseTitle }} select\"><span ng-show=\"$select.isEmpty()\" class=\"select2-chosen\">{{$select.placeholder}}</span> <span ng-hide=\"$select.isEmpty()\" class=\"select2-chosen\" ng-transclude=\"\"></span> <abbr ng-if=\"$select.allowClear && !$select.isEmpty()\" class=\"select2-search-choice-close\" ng-click=\"$select.clear($event)\"></abbr> <span class=\"select2-arrow ui-select-toggle\"><b></b></span></a>");
 	$templateCache.put("select2/select-multiple.tpl.html","<div class=\"ui-select-container ui-select-multiple select2 select2-container select2-container-multi\" ng-class=\"{\'select2-container-active select2-dropdown-open open\': $select.open, \'select2-container-disabled\': $select.disabled}\"><ul class=\"select2-choices\"><span class=\"ui-select-match\"></span><li class=\"select2-search-field\"><input type=\"text\" autocomplete=\"false\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" role=\"combobox\" aria-expanded=\"true\" aria-owns=\"ui-select-choices-{{ $select.generatedId }}\" aria-label=\"{{ $select.baseTitle }}\" aria-activedescendant=\"ui-select-choices-row-{{ $select.generatedId }}-{{ $select.activeIndex }}\" class=\"select2-input ui-select-search\" placeholder=\"{{$selectMultiple.getPlaceholder()}}\" ng-disabled=\"$select.disabled\" ng-hide=\"$select.disabled\" ng-model=\"$select.search\" ng-click=\"$select.activate()\" style=\"width: 34px;\" ondrop=\"return false;\"></li></ul><div class=\"ui-select-dropdown select2-drop select2-with-searchbox select2-drop-active\" ng-class=\"{\'select2-display-none\': !$select.open}\"><div class=\"ui-select-choices\"></div></div></div>");
 	$templateCache.put("select2/select.tpl.html","<div class=\"ui-select-container select2 select2-container\" ng-class=\"{\'select2-container-active select2-dropdown-open open\': $select.open, \'select2-container-disabled\': $select.disabled, \'select2-container-active\': $select.focus, \'select2-allowclear\': $select.allowClear && !$select.isEmpty()}\"><div class=\"ui-select-match\"></div><div class=\"ui-select-dropdown select2-drop select2-with-searchbox select2-drop-active\" ng-class=\"{\'select2-display-none\': !$select.open}\"><div class=\"select2-search\" ng-show=\"$select.searchEnabled\"><input type=\"text\" autocomplete=\"false\" autocorrect=\"false\" autocapitalize=\"off\" spellcheck=\"false\" role=\"combobox\" aria-expanded=\"true\" aria-owns=\"ui-select-choices-{{ $select.generatedId }}\" aria-label=\"{{ $select.baseTitle }}\" aria-activedescendant=\"ui-select-choices-row-{{ $select.generatedId }}-{{ $select.activeIndex }}\" class=\"ui-select-search select2-input\" ng-model=\"$select.search\"></div><div class=\"ui-select-choices\"></div></div></div>");}]);
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(13);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _helpers_apiJs = __webpack_require__(35);
+
+	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.factory('TagFactory', function ($http, $q) {
+	        var url = 'api/v1/tags';
+
+	        return {
+	            all: function all() {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: '' + url
+	                });
+
+	                // Ждем, когда придут данные
+	                request.then(function (data) {
+	                    // Если все ok
+	                    if (data.status === 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            }
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

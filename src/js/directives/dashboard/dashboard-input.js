@@ -1,19 +1,15 @@
 import _                    from 'lodash';
 
 export default (ngModule) =>
-    ngModule.directive('dashboardInput', (CategoryFactory, $rootScope) => {
+    ngModule.directive('dashboardInput', (CategoryFactory, TagFactory, $rootScope) => {
         return {
             restrict: 'E',
             scope: { activities: '=' },
             template: require('./dashboard-input.html'),
             link: function(scope, element) {
-
-                scope.tagsList = [
-                    { id: 1, title: 'One' },
-                    { id: 2, title: 'Two' },
-                    { id: 3, title: 'Three' },
-                    { id: 4, title: 'Four' }
-                ];
+                // Get all tags
+                TagFactory.all().then( data => scope.tagsList = data );
+                // Get all categories
                 CategoryFactory.all().then( data => scope.categories = data );
 
                 scope.add = () => {
