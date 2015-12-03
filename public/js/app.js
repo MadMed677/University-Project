@@ -56097,7 +56097,7 @@
 /* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <pie-chart activities=\"activities\"></pie-chart>\n\n</section>\n"
+	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n"
 
 /***/ },
 /* 35 */
@@ -82233,6 +82233,10 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+	var _lodash = __webpack_require__(19);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
 	var _d3 = __webpack_require__(36);
 
 	var _d32 = _interopRequireDefault(_d3);
@@ -82249,29 +82253,41 @@
 	            template: __webpack_require__(40),
 	            link: function link(scope, element) {
 
-	                scope.$watch('activities', function () {
-	                    console.log(scope.activities);
-	                });
-
+	                // Create 'pie chart'
 	                var chart = _c32['default'].generate({
 	                    bindto: '#chart',
 	                    data: {
 	                        type: 'pie',
 	                        columns: []
+	                    },
+	                    tooltip: {
+	                        show: true,
+	                        format: {
+	                            name: function name(_name) {
+	                                return _name;
+	                            },
+	                            value: function value(_value, ratio) {
+	                                return _value == 1 ? _value + ' hour' : _value + ' hours';
+	                            }
+	                            // value: (value, ratio) => `${ratio*100}%`
+	                        }
+	                    },
+	                    pie: {
+	                        label: {
+	                            // format: (value, ratio, id) => return `${id} | ${ratio*100}%`
+	                        }
 	                    }
 	                });
 
-	                setTimeout(function () {
-	                    chart.load({
-	                        columns: [['data1', 50], ['data2', 15], ['data3', 60]]
-	                    });
-	                }, 1000);
+	                scope.$watch('activities', function (activities) {
 
-	                setTimeout(function () {
-	                    chart.unload({
-	                        ids: 'data1'
+	                    var array = [];
+	                    _lodash2['default'].each(activities, function (activity) {
+	                        array.push([activity.category.title, activity.hours]);
 	                    });
-	                }, 1500);
+
+	                    chart.load({ columns: array });
+	                });
 	            }
 	        };
 	    });
@@ -82283,7 +82299,7 @@
 /* 40 */
 /***/ function(module, exports) {
 
-	module.exports = "<div>\n    <div id=\"chart\"></div>\n</div>\n"
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body\">\n        <div id=\"chart\"></div>\n    </div>\n</div>\n"
 
 /***/ }
 /******/ ]);
