@@ -31,7 +31,8 @@
     "d3": "^3.5.10",
     "laravel-elixir": "^3.0.0",
     "lodash": "^3.10.1",
-    "ngstorage": "^0.3.10"
+    "ngstorage": "^0.3.10",
+    "ui-select": "^0.13.2"
   },
   "directories": {
     "test": "tests"

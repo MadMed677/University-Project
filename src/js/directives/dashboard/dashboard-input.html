@@ -12,11 +12,14 @@
             <div class="col-sm-6">
                 <input type="text" class="form-control" ng-model="user.title" placeholder="Input activity name">
             </div>
-            <div class="col-sm-2">
-                <input type="text" placeholder="Enter tags" class="form-control">
+            <div class="col-sm-3">
+                <ui-select multiple ng-model="user.tags" theme="select2">
+                    <ui-select-match placeholder="Select tags...">{{ $item.title }}</ui-select-match>
+                    <ui-select-choices repeat="tag in tagsList">{{ tag.title }}</ui-select-choices>
+                </ui-select>
             </div>
-            <div class="col-sm-2">
-                <button class="btn btn-primary">Add</button>
+            <div class="col-sm-1 text-center">
+                <button class="btn btn-primary" ng-click="add()">Add</button>
             </div>
         </div>
     </div>
