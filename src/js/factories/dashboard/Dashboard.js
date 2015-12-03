@@ -49,7 +49,7 @@ export default (ngModule) =>
                     } else {
                         deffered.reject();
                     }
-                });
+                }, () => deffered.reject());
 
                 return deffered.promise;
             }

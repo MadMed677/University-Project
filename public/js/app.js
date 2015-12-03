@@ -56166,6 +56166,8 @@
 	                    } else {
 	                        deffered.reject();
 	                    }
+	                }, function () {
+	                    return deffered.reject();
 	                });
 
 	                return deffered.promise;

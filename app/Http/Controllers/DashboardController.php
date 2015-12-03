@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Auth;
+use App\Category;
 use App\Http\Requests;
 use App\Http\Input;
 use App\Http\Controllers\Controller;
@@ -18,7 +19,31 @@ class DashboardController extends Controller
      */
     public function index($date = null)
     {
-        return Auth::user()->activities()->where('date', '=', $date)->get();
+        // Get category types
+        $category_types = Category::all();
+
+        // Get activity to date
+        $activity_to_date = Auth::user()
+                                ->activities()
+                                ->where('date', '=', $date)
+                                ->get();
+
+        // Copy category object
+        foreach ( $category_types as $category) {
+            $total_categories[$category->title]['category'] = $category;
+            $total_categories[$category->title]['hours'] = 0;
+        }
+
+        // Calculate total hours
+        foreach ( $category_types as $category ) {
+            foreach ( $activity_to_date as $activity ) {
+                if ( $category->id == $activity->category_id ) {
+                    $total_categories[$category->title]['hours'] += $activity->hours;
+                }
+            }
+        }
+
+        return $total_categories;
     }
 
     /**
