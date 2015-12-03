@@ -1,8 +1,17 @@
 <div class="box box-default">
     <div class="box-header">
-        <h3 class="box-title">Input Data</h3>
+        <h3 class="box-title">Input New Activity</h3>
     </div>
     <div class="box-body">
-        Dashboard input
+        <div class="row">
+            <div class="col-sm-2">
+                <select name="categories" id="categories" ng-model="user.category" class="form-control">
+                    <option ng-repeat="category in categories" value="{{ category.id }}">{{ category.title }}</option>
+                </select>
+            </div>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" ng-model="user.title" placeholder="Input activity name">
+            </div>
+        </div>
     </div>
 </div>

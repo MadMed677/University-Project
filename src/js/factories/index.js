@@ -7,4 +7,6 @@ export default ngModule => {
 
     require('./dashboard/Dashboard.js')(ngModule);
 
+    require('./categories/Category.js')(ngModule);
+
 };

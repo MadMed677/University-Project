@@ -43160,6 +43160,8 @@
 	    __webpack_require__(24)(ngModule);
 
 	    __webpack_require__(35)(ngModule);
+
+	    __webpack_require__(43)(ngModule);
 	};
 
 	module.exports = exports['default'];
@@ -82325,12 +82327,17 @@
 	var _lodash2 = _interopRequireDefault(_lodash);
 
 	exports['default'] = function (ngModule) {
-	    return ngModule.directive('dashboardInput', function ($rootScope) {
+	    return ngModule.directive('dashboardInput', function (CategoryFactory, $rootScope) {
 	        return {
 	            restrict: 'E',
 	            scope: { activities: '=' },
 	            template: __webpack_require__(42),
-	            link: function link(scope, element) {}
+	            link: function link(scope, element) {
+
+	                CategoryFactory.all().then(function (data) {
+	                    return scope.categories = data;
+	                });
+	            }
 	        };
 	    });
 	};
@@ -82341,7 +82348,57 @@
 /* 42 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input Data</h3>\n    </div>\n    <div class=\"box-body\">\n        Dashboard input\n    </div>\n</div>\n"
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"user.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-8\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"user.title\" placeholder=\"Input activity name\">\n            </div>\n        </div>\n    </div>\n</div>\n"
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(19);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _helpers_apiJs = __webpack_require__(22);
+
+	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.factory('CategoryFactory', function ($http, $q) {
+	        var url = 'api/v1/categories';
+
+	        return {
+	            all: function all() {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: '' + url
+	                });
+
+	                // Ждем, когда придут данные
+	                request.then(function (data) {
+	                    // Если все ok
+	                    if (data.status === 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            }
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);
