@@ -42,7 +42,11 @@ export default (ngModule) =>
                         ]);
                     });
 
-                    chart.load({columns: array});
+                    // Unload data from chart
+                    _.each(array, items => chart.unload({ ids: items[0] }));
+
+                    // Load data to the chart
+                    chart.load({ columns: array });
 
                 });
 

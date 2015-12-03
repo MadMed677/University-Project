@@ -82286,6 +82286,12 @@
 	                        array.push([activity.category.title, activity.hours]);
 	                    });
 
+	                    // Unload data from chart
+	                    _lodash2['default'].each(array, function (items) {
+	                        return chart.unload({ ids: items[0] });
+	                    });
+
+	                    // Load data to the chart
 	                    chart.load({ columns: array });
 	                });
 	            }
