@@ -43070,6 +43070,7 @@
 
 	    __webpack_require__(31)(ngModule);
 	    __webpack_require__(39)(ngModule);
+	    __webpack_require__(41)(ngModule);
 	};
 
 	module.exports = exports['default'];
@@ -56097,7 +56098,7 @@
 /* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n"
+	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n"
 
 /***/ },
 /* 35 */
@@ -82305,7 +82306,42 @@
 /* 40 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body\">\n        <div id=\"chart\"></div>\n    </div>\n</div>\n"
+	module.exports = "<div class=\"box box-primary\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body text-center\">\n        <div id=\"chart\"></div>\n    </div>\n</div>\n"
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(19);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.directive('dashboardInput', function ($rootScope) {
+	        return {
+	            restrict: 'E',
+	            scope: { activities: '=' },
+	            template: __webpack_require__(42),
+	            link: function link(scope, element) {}
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 42 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input Data</h3>\n    </div>\n    <div class=\"box-body\">\n        Dashboard input\n    </div>\n</div>\n"
 
 /***/ }
 /******/ ]);

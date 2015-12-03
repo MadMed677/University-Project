@@ -7,5 +7,6 @@ export default ngModule => {
 
     require('./profile/location.js')(ngModule);
     require('./dashboard/pie-chart.js')(ngModule);
+    require('./dashboard/dashboard-input.js')(ngModule);
 
 };
