@@ -6,5 +6,6 @@ export default ngModule => {
     require('./home/modal-auth.js')(ngModule);
 
     require('./profile/location.js')(ngModule);
+    require('./dashboard/pie-chart.js')(ngModule);
 
 };
