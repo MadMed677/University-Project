@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Auth;
+use App\Activity;
+use App\User;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -25,8 +27,22 @@ class UserController extends Controller
     }
 
     public function profile() {
+
+        $activities = Auth::user()
+                            ->activities()
+                            ->take(10)
+                            ->orderBy('date', 'asc')
+                            ->get();
+
+        foreach ( $activities as $activity ) {
+            $activity->category->get();
+            $activity->location->get();
+            $activity->tags->all();
+        }
+
         return [
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'activities' => $activities
         ];
     }
 

@@ -55919,11 +55919,11 @@
 /* 29 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Header <small>header</small></h1>\n</section>\n\n<section class=\"content\">\n    <p>Content</p>\n</section>\n"
+	module.exports = "<section class=\"content-header\">\n    <h1>Profile page</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-sm-6\">\n            <div class=\"box box-default\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Last <strong>{{ activities.length }}</strong> user activities</h3>\n                </div>\n                <div class=\"box-body\">\n                    <ul class=\"timeline\">\n                        <li ng-repeat=\"activity in activitiesList\" ng-class=\"{ 'time-label': activity.view }\" ng-click=\"selectActive(activity)\">\n                            <span ng-if=\"activity.view\">{{ activity.date | date: 'dd/MM/yyyy' }}</span>\n\n                            <i class=\"fa fa-envelope bg-blue\" ng-if=\"!activity.view\"></i>\n                            <div class=\"timeline-item\" ng-if=\"!activity.view\">\n                                <span class=\"time\">\n                                    <i class=\"fa fa-clock-o\"></i>\n                                    {{ activity.date | date: 'dd/MM' }}\n                                </span>\n                                <h3 class=\"timeline-header\">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>\n\n                                <div class=\"timeline-body\" ng-show=\"activity.tags.length\">\n                                    <div>\n                                        <span ng-repeat=\"tag in activity.tags\" class=\"timeline-tag bg-blue\">{{ tag.title }}</span>\n                                    </div>\n                                </div>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-6\">\n            <div class=\"box box-warning\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Location</h3>\n                </div>\n                <div class=\"box-body\">\n                    {{ activeActivity.location['title'] }} {{ activeActivity.date }}\n                </div>\n            </div>\n        </div>\n    </div>\n\n</section>\n"
 
 /***/ },
 /* 30 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -55931,12 +55931,45 @@
 	    value: true
 	});
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(19);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
 	exports['default'] = function (ngModule) {
 	    return ngModule.controller('ProfileCtrl', function ($scope, UserFactory) {
 
+	        $scope.activities = [];
+	        $scope.activitiesList = [];
+	        $scope.activeActivity = {};
+
 	        UserFactory.profile().then(function (data) {
-	            console.log('data: ', data);
+	            $scope.activities = data.activities;
 	        });
+
+	        $scope.selectActive = function (activity) {
+	            if (!activity.view) $scope.activeActivity = activity;
+	        };
+
+	        $scope.$watch('activities', function (newActivities) {
+	            var localActivityList = [];
+
+	            _lodash2['default'].each(newActivities, function (newActivity) {
+	                // Add label
+	                localActivityList.push({
+	                    date: newActivity.date,
+	                    view: 'label'
+	                });
+
+	                // Add data
+	                localActivityList.push(newActivity);
+	            });
+
+	            $scope.activitiesList = localActivityList;
+
+	            console.log('$scope.activitiesList: ', $scope.activitiesList);
+	        }, true);
 	    });
 	};
 
