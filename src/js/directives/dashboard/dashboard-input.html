@@ -9,8 +9,14 @@
                     <option ng-repeat="category in categories" value="{{ category.id }}">{{ category.title }}</option>
                 </select>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-6">
                 <input type="text" class="form-control" ng-model="user.title" placeholder="Input activity name">
+            </div>
+            <div class="col-sm-2">
+                <input type="text" placeholder="Enter tags" class="form-control">
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-primary">Add</button>
             </div>
         </div>
     </div>

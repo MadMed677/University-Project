@@ -59,8 +59,8 @@
 	var ngModule = _angular2['default'].module('university', [__webpack_require__(5), __webpack_require__(6), 'ui.bootstrap', 'ngStorage']);
 
 	/* Loading Controllers */__webpack_require__(8)(ngModule);
-	/* Loading Directives */__webpack_require__(12)(ngModule);
-	/* Loading Factories */__webpack_require__(17)(ngModule);
+	/* Loading Directives */__webpack_require__(16)(ngModule);
+	/* Loading Factories */__webpack_require__(32)(ngModule);
 
 	ngModule.config(function ($stateProvider, $locationProvider, $httpProvider) {
 
@@ -71,17 +71,17 @@
 	    $stateProvider.state('dashboard', {
 	        url: '/dashboard',
 	        controller: 'DashboardCtrl',
-	        template: __webpack_require__(34),
+	        template: __webpack_require__(40),
 	        data: { needAuth: true }
 	    }).state('list', {
 	        url: '/list',
 	        controller: 'IndexCtrl',
-	        template: __webpack_require__(25),
+	        template: __webpack_require__(41),
 	        data: { needAuth: false }
 	    }).state('profile', {
 	        url: '/profile',
 	        controller: 'ProfileCtrl',
-	        template: __webpack_require__(29),
+	        template: __webpack_require__(42),
 	        data: { needAuth: true }
 	    }).state('auth', {
 	        url: '/auth',
@@ -90,7 +90,7 @@
 	    }).state('auth.login', {
 	        url: '/login',
 	        controller: 'LoginCtrl',
-	        template: __webpack_require__(26),
+	        template: __webpack_require__(43),
 	        data: { needAuth: false }
 	    });
 	});
@@ -42968,8 +42968,8 @@
 	    __webpack_require__(9)(ngModule);
 	    __webpack_require__(10)(ngModule);
 	    __webpack_require__(11)(ngModule);
-	    __webpack_require__(30)(ngModule);
-	    __webpack_require__(33)(ngModule);
+	    __webpack_require__(12)(ngModule);
+	    __webpack_require__(15)(ngModule);
 	};
 
 	module.exports = exports['default'];
@@ -43061,170 +43061,52 @@
 	    value: true
 	});
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(13);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
 	exports['default'] = function (ngModule) {
+	    return ngModule.controller('ProfileCtrl', function ($scope, UserFactory) {
 
-	    __webpack_require__(13)(ngModule);
-	    __webpack_require__(15)(ngModule);
+	        $scope.activities = [];
+	        $scope.activitiesList = [];
+	        $scope.activeActivity = {};
 
-	    __webpack_require__(27)(ngModule);
+	        UserFactory.profile().then(function (data) {
+	            $scope.activities = data.activities;
+	        });
 
-	    __webpack_require__(31)(ngModule);
-	    __webpack_require__(39)(ngModule);
-	    __webpack_require__(41)(ngModule);
+	        $scope.selectActive = function (activity) {
+	            if (!activity.view) $scope.activeActivity = activity;
+	        };
+
+	        $scope.$watch('activities', function (newActivities) {
+	            var localActivityList = [];
+
+	            _lodash2['default'].each(newActivities, function (newActivity) {
+	                // Add label
+	                localActivityList.push({
+	                    date: newActivity.date,
+	                    view: 'label'
+	                });
+
+	                // Add data
+	                localActivityList.push(newActivity);
+	            });
+
+	            $scope.activitiesList = localActivityList;
+
+	            console.log('$scope.activitiesList: ', $scope.activitiesList);
+	        }, true);
+	    });
 	};
 
 	module.exports = exports['default'];
 
 /***/ },
 /* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	exports['default'] = function (ngModule) {
-	    return ngModule.directive('navigation', function () {
-	        return {
-	            restrict: 'E',
-	            scope: {},
-	            template: __webpack_require__(14),
-	            link: function link(scope, element) {}
-	        };
-	    });
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	module.exports = "<aside class=\"main-sidebar\">\n    <section class=\"sidebar\">\n        <ul class=\"sidebar-menu\">\n            <li class=\"header\">Главное меню</li>\n\n            <li ui-sref-active=\"active\"><a href ui-sref=\"dashboard\"><i class=\"fa fa-home\"></i> <span>Dashboard</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"list\"><i class=\"fa fa-home\"></i> <span>List</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"profile\"><i class=\"fa fa-user\"></i> <span>Profile</span></a></li>\n        </ul>\n    </section>\n</aside>\n"
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	exports['default'] = function (ngModule) {
-	    return ngModule.directive('headerDirective', function ($rootScope) {
-	        return {
-	            restrict: 'E',
-	            scope: {},
-	            template: __webpack_require__(16),
-	            link: function link(scope, element) {
-
-	                scope.showAuthModal = function () {
-	                    $('#myModal').modal('show');
-	                };
-
-	                scope.signOut = function () {
-	                    scope.$emit('user:logout');
-	                };
-	            }
-	        };
-	    });
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	module.exports = "<header class=\"main-header\">\n    <!-- Logo -->\n    <a href=\"profile\" class=\"logo\">\n        <!-- mini logo for sidebar mini 50x50 pixels -->\n        <span class=\"logo-mini\"><b>U</b>Pr</span>\n        <!-- logo for regular state and mobile devices -->\n        <span class=\"logo-lg\"><b>University</b>Project</span>\n    </a>\n    <!-- Header Navbar: style can be found in header.less -->\n    <nav class=\"navbar navbar-static-top\" role=\"navigation\">\n        <!-- Sidebar toggle button-->\n        <a href=\"#\" class=\"sidebar-toggle\" data-toggle=\"offcanvas\" role=\"button\">\n            <span class=\"sr-only\">Toggle navigation</span>\n        </a>\n        <div class=\"navbar-custom-menu\">\n            <ul class=\"nav navbar-nav\">\n                <!-- User Account: style can be found in dropdown.less -->\n                <li class=\"dropdown user user-menu\">\n                    <a class=\"dropdown-toggle\" ng-if=\"!$root.user\" ng-click=\"showAuthModal()\">\n                        <img src=\"http://www.coachesthatmakemoney.com/images/dp.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">Login</span>\n                    </a>\n                    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" ng-if=\"$root.user\">\n                        <img src=\"../img/user2-160x160.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">{{ $root.user['name'] }}</span>\n                    </a>\n                    <ul class=\"dropdown-menu\">\n                        <!-- User image -->\n                        <li class=\"user-header\">\n                            <img src=\"../img/user2-160x160.jpg\" class=\"img-circle\" alt=\"User Image\">\n                            <p>\n                                {{ $root.user['name'] }}\n                                <small>{{ $root.user['login'] }}</small>\n                            </p>\n                        </li>\n                        <!-- Menu Body -->\n                        <li class=\"user-body\">\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Followers</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Sales</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Friends</a>\n                            </div>\n                        </li>\n                        <!-- Menu Footer-->\n                        <li class=\"user-footer\">\n                            <div class=\"pull-left\">\n                                <a href ui-sref=\"profile\" class=\"btn btn-default btn-flat\">Profile</a>\n                            </div>\n                            <div class=\"pull-right\">\n                                <a href class=\"btn btn-default btn-flat\" ng-click=\"signOut()\">Sign out</a>\n                            </div>\n                        </li>\n                    </ul>\n                </li>\n            </ul>\n        </div>\n    </nav>\n</header>\n"
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	exports['default'] = function (ngModule) {
-
-	    __webpack_require__(18)(ngModule);
-	    __webpack_require__(21)(ngModule);
-
-	    __webpack_require__(24)(ngModule);
-
-	    __webpack_require__(35)(ngModule);
-
-	    __webpack_require__(43)(ngModule);
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _lodash = __webpack_require__(19);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	exports['default'] = function (ngModule) {
-	    return ngModule.factory('SessionService', function ($injector) {
-	        return {
-	            checkAccess: function checkAccess(event, toState, toParams, fromState, fromParams) {
-	                var $scope = $injector.get('$rootScope'),
-	                    $sessionStorage = $injector.get('$sessionStorage');
-
-	                if (!_lodash2['default'].isUndefined(toState.data)) {
-	                    if (!_lodash2['default'].isUndefined(toState.data) && toState.data.needAuth) {
-	                        console.log('Need Auth');
-	                        /**
-	                         * действия для входа БЕЗ авторизации
-	                         */
-
-	                        var strUser = window.localStorage.getItem('user');
-	                        if (strUser) {
-	                            if (!JSON.parse(strUser)) {
-	                                /**
-	                                 * Пользователь не авторизован
-	                                 */
-	                                event.preventDefault();
-	                                $scope.$state.go('auth.login');
-	                            }
-	                        } else {
-	                            event.preventDefault();
-	                            $scope.$state.go('auth.login');
-	                        }
-	                    } else {
-	                        console.log('No Need Auth');
-	                        /**
-	                         * Вход С авторизацией
-	                         */
-	                    }
-	                }
-	            }
-	        };
-	    });
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -55579,10 +55461,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)(module), (function() { return this; }())))
 
 /***/ },
-/* 20 */
+/* 14 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -55598,238 +55480,29 @@
 
 
 /***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
+/* 15 */
+/***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _lodash = __webpack_require__(19);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _helpers_apiJs = __webpack_require__(22);
-
-	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
 
 	exports['default'] = function (ngModule) {
-	    return ngModule.factory('UserFactory', function (SessionService, $http, $q) {
-	        var url = 'api/v1/auth';
+	    return ngModule.controller('DashboardCtrl', function ($scope, $rootScope, DashboardFactory) {
 
-	        return {
-	            auth: function auth(req) {
-	                var deffered = $q.defer();
-	                var request = new _helpers_apiJs2['default'].http({
-	                    method: 'POST',
-	                    body: req,
-	                    url: '' + url
-	                });
-
-	                // Wait until data is loaded
-	                request.then(function (data) {
-	                    // If everything is all right
-	                    if (data.status == 200) {
-	                        // Save to localStorage
-	                        window.localStorage.setItem('user', JSON.stringify(data.data));
-
-	                        // Response
-	                        deffered.resolve(data.data);
-	                    } else {
-	                        // Clear localStorage
-	                        window.localStorage.setItem('user', "");
-
-	                        // Reject
-	                        deffered.reject();
-	                    }
-	                });
-
-	                return deffered.promise;
-	            },
-
-	            login: function login() {
-	                var deffered = $q.defer();
-	                var request = new _helpers_apiJs2['default'].http({
-	                    method: 'GET',
-	                    url: '' + url
-	                });
-
-	                // Try find this user in localStorage
-	                // if it fail set "GET" request to `${url}`
-	                var strUser = window.localStorage.getItem('user');
-	                if (strUser) {
-	                    var user = JSON.parse(strUser);
-	                    if (!user || !_lodash2['default'].isEmpty(user)) {
-	                        deffered.resolve(user);
-	                    }
-	                }
-
-	                // Wait while data is going to load
-	                request.then(function (data) {
-	                    // If all ok
-	                    if (data.status == 200) {
-	                        deffered.resolve(data.data);
-	                    } else {
-	                        deffered.reject();
-	                    }
-	                });
-
-	                return deffered.promise;
-	            },
-
-	            logout: function logout() {
-	                var deffered = $q.defer();
-	                var request = new _helpers_apiJs2['default'].http({
-	                    method: 'GET',
-	                    url: 'api/v1/user/logout'
-	                });
-
-	                // Wait while data is going to load
-	                request.then(function (data) {
-	                    // If all ok
-
-	                    window.localStorage.setItem('user', '');
-
-	                    if (data.status == 200) {
-	                        deffered.resolve(data.data);
-	                    } else {
-	                        deffered.reject();
-	                    }
-	                });
-
-	                return deffered.promise;
-	            },
-
-	            profile: function profile() {
-	                var deffered = $q.defer();
-	                var request = new _helpers_apiJs2['default'].http({
-	                    method: 'GET',
-	                    url: 'api/v1/user/profile'
-	                });
-
-	                // Wait while data is going to load
-	                request.then(function (data) {
-	                    // If all ok
-	                    if (data.status == 200) {
-	                        deffered.resolve(data.data);
-	                    } else {
-	                        deffered.reject();
-	                    }
-	                });
-
-	                return deffered.promise;
-	            }
-	        };
-	    });
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	var _lodash = __webpack_require__(19);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _settingsJs = __webpack_require__(23);
-
-	var _settingsJs2 = _interopRequireDefault(_settingsJs);
-
-	var Request = (function () {
-	    function Request(params, $resource) {
-	        var _this = this;
-
-	        _classCallCheck(this, Request);
-
-	        this.url = params.url;
-	        this.method = params.method || 'get';
-	        this.param = params.param || {};
-	        this.body = params.body || {};
-	        this.methods = params.methods || {};
-	        this.$resource = $resource(_settingsJs2['default'].baseURL + this.url, this.param, this.methods);
-
-	        _lodash2['default'].each(this.methods, function (method, key) {
-	            _lodash2['default'].assign(method, _this.commonMethods());
-	            _this[key] = _this.$resource[key];
+	        $scope.activities = {};
+	        DashboardFactory.getDay().then(function (data) {
+	            $scope.activities = data;
 	        });
-	    }
-
-	    _createClass(Request, [{
-	        key: 'commonMethods',
-	        value: function commonMethods() {
-	            return {
-	                method: 'get',
-	                headers: { 'Access-token': 'cf13cf1c287fc0cf5285' }
-	            };
-	        }
-	    }], [{
-	        key: 'http',
-	        value: function http(params) {
-	            if (params.params) params.params = '?' + $.param(params.params);else params.params = '';
-
-	            var deffered = new Promise(function (resolve, reject) {
-	                $.ajax(_settingsJs2['default'].baseURL + params.url + params.params, {
-	                    type: params.method,
-	                    data: params.body,
-	                    headers: {},
-	                    xhrFields: { withCredentials: true },
-	                    crossDomain: true,
-	                    success: function success(res, status, params) {
-	                        //console.log('res: ', res);
-	                        var result = { data: res, status: params.status };
-	                        //console.log('res jQuery: ', result);
-	                        resolve(result);
-	                    },
-	                    error: function error(_error) {
-	                        return reject(_error);
-	                    }
-	                });
-	            });
-
-	            return deffered;
-	        }
-	    }]);
-
-	    return Request;
-	})();
-
-	exports['default'] = Request;
-	module.exports = exports['default'];
-
-/***/ },
-/* 23 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	exports['default'] = {
-	    baseURL: '/'
+	    });
 	};
+
 	module.exports = exports['default'];
 
 /***/ },
-/* 24 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55838,39 +55511,74 @@
 	    value: true
 	});
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports['default'] = function (ngModule) {
 
-	var _lodash = __webpack_require__(19);
+	    __webpack_require__(17)(ngModule);
+	    __webpack_require__(19)(ngModule);
 
-	var _lodash2 = _interopRequireDefault(_lodash);
+	    __webpack_require__(21)(ngModule);
 
-	var _helpers_apiJs = __webpack_require__(22);
+	    __webpack_require__(23)(ngModule);
+	    __webpack_require__(25)(ngModule);
+	    __webpack_require__(30)(ngModule);
+	};
 
-	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
+	module.exports = exports['default'];
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
 
 	exports['default'] = function (ngModule) {
-	    return ngModule.factory('ActivitiesFactory', function (SessionService, $http, $q) {
-	        var url = 'api/v1/activities';
-
+	    return ngModule.directive('navigation', function () {
 	        return {
-	            all: function all() {
-	                var deffered = $q.defer();
-	                var request = new _helpers_apiJs2['default'].http({
-	                    method: 'GET',
-	                    url: '' + url
-	                });
+	            restrict: 'E',
+	            scope: {},
+	            template: __webpack_require__(18),
+	            link: function link(scope, element) {}
+	        };
+	    });
+	};
 
-	                // Ждем, когда придут данные
-	                request.then(function (data) {
-	                    // Если все ok
-	                    if (data.status == 200) {
-	                        deffered.resolve(data.data);
-	                    } else {
-	                        deffered.reject();
-	                    }
-	                });
+	module.exports = exports['default'];
 
-	                return deffered.promise;
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = "<aside class=\"main-sidebar\">\n    <section class=\"sidebar\">\n        <ul class=\"sidebar-menu\">\n            <li class=\"header\">Главное меню</li>\n\n            <li ui-sref-active=\"active\"><a href ui-sref=\"dashboard\"><i class=\"fa fa-home\"></i> <span>Dashboard</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"list\"><i class=\"fa fa-home\"></i> <span>List</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"profile\"><i class=\"fa fa-user\"></i> <span>Profile</span></a></li>\n        </ul>\n    </section>\n</aside>\n"
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.directive('headerDirective', function ($rootScope) {
+	        return {
+	            restrict: 'E',
+	            scope: {},
+	            template: __webpack_require__(20),
+	            link: function link(scope, element) {
+
+	                scope.showAuthModal = function () {
+	                    $('#myModal').modal('show');
+	                };
+
+	                scope.signOut = function () {
+	                    scope.$emit('user:logout');
+	                };
 	            }
 	        };
 	    });
@@ -55879,19 +55587,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 25 */
+/* 20 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Productivity <small>people list</small></h1>\n</section>\n\n<section class=\"content\">\n    <div class=\"col-md-4\" ng-repeat=\"activity in activities\">\n        <div class=\"box box-widget widget-user\">\n            <div class=\"widget-user-header bg-black\" style=\"background: url('https://almsaeedstudio.com/themes/AdminLTE/dist/img/photo1.png') center center;\">\n                <h3 class=\"widget-user-username\">{{ activity.category['title'] }}</h3>\n                <h5 class=\"widget-user-desc\">Hours working: <strong>{{ activity.hours }} / 24</strong></h5>\n                <div class=\"active-circle\" ng-if=\"$root.user.login === activity.user.login\"></div>\n            </div>\n            <div class=\"widget-user-image\">\n                <img class=\"img-circle\" src=\"https://almsaeedstudio.com/themes/AdminLTE/dist/img/user3-128x128.jpg\" alt=\"User Avatar\">\n            </div>\n            <div class=\"box-footer\">\n                <div class=\"row\">\n                    <div class=\"col-sm-4 border-right\">\n                        <div class=\"description-block\">\n                            <h5 class=\"description-header\">{{ activity.date | date: 'dd/MMM/yyyy' }}</h5>\n                            <span class=\"description-text\">Date</span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 border-right\">\n                        <div class=\"description-block\"\n                             ng-click=\"selectActivity(activity)\"\n                             ng-mouseenter=\"selectActivity(activity)\"\n                             uib-popover-template=\"dynamicPopover.templateUrl\"\n                             popover-title=\"{{ dynamicPopover.title }}\"\n                             popover-placement=\"right\"\n                             popover-trigger=\"mouseenter\">\n                            <h5 class=\"description-header\">{{ activity.tags.length }}</h5>\n                            <span class=\"description-text\">Tags</span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4\">\n                        <div class=\"description-block\">\n                            <h5 class=\"description-header\">{{ activity.user['name'] }}</h5>\n                            <span class=\"description-text\">User</span>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</section>\n\n<modal-auth></modal-auth>\n\n<script type=\"text/ng-template\" id=\"myPopoverTemplate.html\">\n    <table class=\"table\">\n        <tbody>\n            <tr ng-repeat=\"tag in activeActivity.tags\">\n                <td>{{ tag.title }}</td>\n                <!--<td><div class=\"color\" ng-style=\"{'background': '#3c8dbc'}\">#3c8dbc</div></td>-->\n            </tr>\n        </tbody>\n    </table>\n</script>\n"
+	module.exports = "<header class=\"main-header\">\n    <!-- Logo -->\n    <a href=\"profile\" class=\"logo\">\n        <!-- mini logo for sidebar mini 50x50 pixels -->\n        <span class=\"logo-mini\"><b>U</b>Pr</span>\n        <!-- logo for regular state and mobile devices -->\n        <span class=\"logo-lg\"><b>University</b>Project</span>\n    </a>\n    <!-- Header Navbar: style can be found in header.less -->\n    <nav class=\"navbar navbar-static-top\" role=\"navigation\">\n        <!-- Sidebar toggle button-->\n        <a href=\"#\" class=\"sidebar-toggle\" data-toggle=\"offcanvas\" role=\"button\">\n            <span class=\"sr-only\">Toggle navigation</span>\n        </a>\n        <div class=\"navbar-custom-menu\">\n            <ul class=\"nav navbar-nav\">\n                <!-- User Account: style can be found in dropdown.less -->\n                <li class=\"dropdown user user-menu\">\n                    <a class=\"dropdown-toggle\" ng-if=\"!$root.user\" ng-click=\"showAuthModal()\">\n                        <img src=\"http://www.coachesthatmakemoney.com/images/dp.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">Login</span>\n                    </a>\n                    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" ng-if=\"$root.user\">\n                        <img src=\"../img/user2-160x160.jpg\" class=\"user-image\" alt=\"User Image\">\n                        <span class=\"hidden-xs\">{{ $root.user['name'] }}</span>\n                    </a>\n                    <ul class=\"dropdown-menu\">\n                        <!-- User image -->\n                        <li class=\"user-header\">\n                            <img src=\"../img/user2-160x160.jpg\" class=\"img-circle\" alt=\"User Image\">\n                            <p>\n                                {{ $root.user['name'] }}\n                                <small>{{ $root.user['login'] }}</small>\n                            </p>\n                        </li>\n                        <!-- Menu Body -->\n                        <li class=\"user-body\">\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Followers</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Sales</a>\n                            </div>\n                            <div class=\"col-xs-4 text-center\">\n                                <a href=\"#\">Friends</a>\n                            </div>\n                        </li>\n                        <!-- Menu Footer-->\n                        <li class=\"user-footer\">\n                            <div class=\"pull-left\">\n                                <a href ui-sref=\"profile\" class=\"btn btn-default btn-flat\">Profile</a>\n                            </div>\n                            <div class=\"pull-right\">\n                                <a href class=\"btn btn-default btn-flat\" ng-click=\"signOut()\">Sign out</a>\n                            </div>\n                        </li>\n                    </ul>\n                </li>\n            </ul>\n        </div>\n    </nav>\n</header>\n"
 
 /***/ },
-/* 26 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"container\">\n    <h1>This is login page</h1>\n</div>"
-
-/***/ },
-/* 27 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55905,7 +55607,7 @@
 	        return {
 	            restrict: 'E',
 	            scope: {},
-	            template: __webpack_require__(28),
+	            template: __webpack_require__(22),
 	            link: function link(scope, element) {
 
 	                var modal = $('#myModal');
@@ -55924,19 +55626,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 28 */
+/* 22 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\" id=\"myModal\">\n  <div class=\"modal-dialog\">\n\t<div class=\"modal-content\">\n\t  <div class=\"modal-header\">\n\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n\t\t<h4 class=\"modal-title\">Authorization</h4>\n\t  </div>\n\t  <div class=\"modal-body\">\n\t\t<form class=\"form-horizontal\" ng-submit=\"formAuthorize()\">\n\t\t    <div class=\"form-group\">\n\t\t        <label for=\"login\" class=\"col-sm-2 control-label\">Login</label>\n                <div class=\"col-sm-10\">\n                    <input type=\"text\" class=\"form-control\" id=\"login\" placeholder=\"Login field\" ng-model=\"user.login\">\n                </div>\n\t\t    </div>\n            <div class=\"form-group\">\n\t\t        <label for=\"password\" class=\"col-sm-2 control-label\">Password</label>\n                <div class=\"col-sm-10\">\n                    <input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password field\" ng-model=\"user.password\">\n                </div>\n\t\t    </div>\n\t\t</form>\n\t  </div>\n\t  <div class=\"modal-footer\">\n\t\t<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n\t\t<button type=\"submit\" class=\"btn btn-primary\" ng-click=\"formAuthorize()\">Authorize</button>\n\t  </div>\n\t</div>\n  </div>\n</div>\n"
 
 /***/ },
-/* 29 */
-/***/ function(module, exports) {
-
-	module.exports = "<section class=\"content-header\">\n    <h1>Profile page</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div ng-class=\"{ 'col-sm-6': activeActivity, 'col-sm-12': !activeActivity }\">\n            <div class=\"box box-default\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Last <strong>{{ activities.length }}</strong> user activities</h3>\n                </div>\n                <div class=\"box-body\">\n                    <ul class=\"timeline\">\n                        <li ng-repeat=\"activity in activitiesList\" ng-class=\"{ 'time-label': activity.view }\" ng-click=\"selectActive(activity)\">\n                            <span ng-if=\"activity.view\">{{ activity.date | date: 'dd/MM/yyyy' }}</span>\n\n                            <i class=\"fa fa-envelope bg-blue\" ng-if=\"!activity.view\"></i>\n                            <div class=\"timeline-item\" ng-if=\"!activity.view\">\n                                <span class=\"time\">\n                                    <i class=\"fa fa-clock-o\"></i>\n                                    {{ activity.date | date: 'dd/MM' }}\n                                </span>\n                                <h3 class=\"timeline-header\">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>\n\n                                <div class=\"timeline-body\" ng-show=\"activity.tags.length\">\n                                    <div>\n                                        <span ng-repeat=\"tag in activity.tags\" class=\"timeline-tag bg-blue\">{{ tag.title }}</span>\n                                    </div>\n                                </div>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-6\">\n            <div class=\"box box-warning\">\n                <location-directive activity=\"activeActivity\"></location-directive>\n            </div>\n        </div>\n    </div>\n\n</section>\n"
-
-/***/ },
-/* 30 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55947,61 +55643,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodash = __webpack_require__(19);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	exports['default'] = function (ngModule) {
-	    return ngModule.controller('ProfileCtrl', function ($scope, UserFactory) {
-
-	        $scope.activities = [];
-	        $scope.activitiesList = [];
-	        $scope.activeActivity = {};
-
-	        UserFactory.profile().then(function (data) {
-	            $scope.activities = data.activities;
-	        });
-
-	        $scope.selectActive = function (activity) {
-	            if (!activity.view) $scope.activeActivity = activity;
-	        };
-
-	        $scope.$watch('activities', function (newActivities) {
-	            var localActivityList = [];
-
-	            _lodash2['default'].each(newActivities, function (newActivity) {
-	                // Add label
-	                localActivityList.push({
-	                    date: newActivity.date,
-	                    view: 'label'
-	                });
-
-	                // Add data
-	                localActivityList.push(newActivity);
-	            });
-
-	            $scope.activitiesList = localActivityList;
-
-	            console.log('$scope.activitiesList: ', $scope.activitiesList);
-	        }, true);
-	    });
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 31 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _lodash = __webpack_require__(19);
+	var _lodash = __webpack_require__(13);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -56012,7 +55654,7 @@
 	            scope: {
 	                activity: '='
 	            },
-	            template: __webpack_require__(32),
+	            template: __webpack_require__(24),
 	            link: function link(scope, element) {
 
 	                scope.location = {};
@@ -56069,41 +55711,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 32 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"box-header\">\n    <h3 class=\"box-title\">Location: {{ activity.location['title'] }} {{ activity.date }}</h3>\n</div>\n<div class=\"box-body\">\n\n    <div ng-show=\"location.center\">\n        <div id=\"map\" class=\"map-container\"></div>\n    </div>\n\n</div>\n"
 
 /***/ },
-/* 33 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	exports['default'] = function (ngModule) {
-	    return ngModule.controller('DashboardCtrl', function ($scope, $rootScope, DashboardFactory) {
-
-	        $scope.activities = {};
-	        DashboardFactory.getDay().then(function (data) {
-	            $scope.activities = data;
-	        });
-	    });
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 34 */
-/***/ function(module, exports) {
-
-	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n"
-
-/***/ },
-/* 35 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56114,68 +55728,67 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodash = __webpack_require__(19);
+	var _lodash = __webpack_require__(13);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _helpers_apiJs = __webpack_require__(22);
+	var _d3 = __webpack_require__(26);
 
-	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
+	var _d32 = _interopRequireDefault(_d3);
+
+	var _c3 = __webpack_require__(27);
+
+	var _c32 = _interopRequireDefault(_c3);
 
 	exports['default'] = function (ngModule) {
-	    return ngModule.factory('DashboardFactory', function ($http, $q) {
-	        var url = 'api/v1/dashboard';
-
+	    return ngModule.directive('pieChart', function (UserFactory, $rootScope) {
 	        return {
-	            all: function all() {
-	                var deffered = $q.defer();
-	                var request = new _helpers_apiJs2['default'].http({
-	                    method: 'GET',
-	                    url: '' + url
-	                });
+	            restrict: 'E',
+	            scope: { activities: '=' },
+	            template: __webpack_require__(29),
+	            link: function link(scope, element) {
 
-	                // Ждем, когда придут данные
-	                request.then(function (data) {
-	                    // Если все ok
-	                    if (data.status === 200) {
-	                        deffered.resolve(data.data);
-	                    } else {
-	                        deffered.reject();
+	                // Create 'pie chart'
+	                var chart = _c32['default'].generate({
+	                    bindto: '#chart',
+	                    data: {
+	                        type: 'pie',
+	                        columns: []
+	                    },
+	                    tooltip: {
+	                        show: true,
+	                        format: {
+	                            name: function name(_name) {
+	                                return _name;
+	                            },
+	                            value: function value(_value, ratio) {
+	                                return _value == 1 ? _value + ' hour' : _value + ' hours';
+	                            }
+	                            // value: (value, ratio) => `${ratio*100}%`
+	                        }
+	                    },
+	                    pie: {
+	                        label: {
+	                            // format: (value, ratio, id) => return `${id} | ${ratio*100}%`
+	                        }
 	                    }
 	                });
 
-	                return deffered.promise;
-	            },
+	                scope.$watch('activities', function (activities) {
 
-	            getDay: function getDay() {
-	                var day = arguments.length <= 0 || arguments[0] === undefined ? new Date() : arguments[0];
+	                    var array = [];
+	                    _lodash2['default'].each(activities, function (activity) {
+	                        array.push([activity.category.title, activity.hours]);
+	                    });
 
-	                var date = {
-	                    year: day.getFullYear().toString(),
-	                    month: (day.getMonth() + 1).toString(),
-	                    day: day.getDate() < 10 ? '0' + day.getDate() : day.getDate().toString()
-	                };
+	                    // Unload data from chart
+	                    _lodash2['default'].each(array, function (items) {
+	                        return chart.unload({ ids: items[0] });
+	                    });
 
-	                var dateString = date.year + '-' + date.month + '-' + date.day;
-	                var deffered = $q.defer();
-	                var request = new _helpers_apiJs2['default'].http({
-	                    method: 'GET',
-	                    url: url + '/' + dateString
+	                    // Load data to the chart
+	                    chart.load({ columns: array });
 	                });
-
-	                // Ждем, когда придут данные
-	                request.then(function (data) {
-	                    // Если все ok
-	                    if (data.status === 200) {
-	                        deffered.resolve(data.data);
-	                    } else {
-	                        deffered.reject();
-	                    }
-	                }, function () {
-	                    return deffered.reject();
-	                });
-
-	                return deffered.promise;
 	            }
 	        };
 	    });
@@ -56184,7 +55797,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 36 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;!function() {
@@ -65739,7 +65352,7 @@
 	}();
 
 /***/ },
-/* 37 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (window) {
@@ -65790,7 +65403,7 @@
 
 	    function ChartInternal(api) {
 	        var $$ = this;
-	        $$.d3 = window.d3 ? window.d3 :  true ? __webpack_require__(38) : undefined;
+	        $$.d3 = window.d3 ? window.d3 :  true ? __webpack_require__(28) : undefined;
 	        $$.api = api;
 	        $$.config = $$.getDefaultConfig();
 	        $$.data = {};
@@ -72783,7 +72396,7 @@
 	    }
 
 	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(38)], __WEBPACK_AMD_DEFINE_FACTORY__ = (c3), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(28)], __WEBPACK_AMD_DEFINE_FACTORY__ = (c3), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if ('undefined' !== typeof exports && 'undefined' !== typeof module) {
 	        module.exports = c3;
 	    } else {
@@ -72794,7 +72407,7 @@
 
 
 /***/ },
-/* 38 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;!function() {
@@ -82225,93 +81838,13 @@
 	}();
 
 /***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _lodash = __webpack_require__(19);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _d3 = __webpack_require__(36);
-
-	var _d32 = _interopRequireDefault(_d3);
-
-	var _c3 = __webpack_require__(37);
-
-	var _c32 = _interopRequireDefault(_c3);
-
-	exports['default'] = function (ngModule) {
-	    return ngModule.directive('pieChart', function (UserFactory, $rootScope) {
-	        return {
-	            restrict: 'E',
-	            scope: { activities: '=' },
-	            template: __webpack_require__(40),
-	            link: function link(scope, element) {
-
-	                // Create 'pie chart'
-	                var chart = _c32['default'].generate({
-	                    bindto: '#chart',
-	                    data: {
-	                        type: 'pie',
-	                        columns: []
-	                    },
-	                    tooltip: {
-	                        show: true,
-	                        format: {
-	                            name: function name(_name) {
-	                                return _name;
-	                            },
-	                            value: function value(_value, ratio) {
-	                                return _value == 1 ? _value + ' hour' : _value + ' hours';
-	                            }
-	                            // value: (value, ratio) => `${ratio*100}%`
-	                        }
-	                    },
-	                    pie: {
-	                        label: {
-	                            // format: (value, ratio, id) => return `${id} | ${ratio*100}%`
-	                        }
-	                    }
-	                });
-
-	                scope.$watch('activities', function (activities) {
-
-	                    var array = [];
-	                    _lodash2['default'].each(activities, function (activity) {
-	                        array.push([activity.category.title, activity.hours]);
-	                    });
-
-	                    // Unload data from chart
-	                    _lodash2['default'].each(array, function (items) {
-	                        return chart.unload({ ids: items[0] });
-	                    });
-
-	                    // Load data to the chart
-	                    chart.load({ columns: array });
-	                });
-	            }
-	        };
-	    });
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 40 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"box box-primary\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body text-center\">\n        <div id=\"chart\"></div>\n    </div>\n</div>\n"
 
 /***/ },
-/* 41 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82322,7 +81855,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodash = __webpack_require__(19);
+	var _lodash = __webpack_require__(13);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -82331,7 +81864,7 @@
 	        return {
 	            restrict: 'E',
 	            scope: { activities: '=' },
-	            template: __webpack_require__(42),
+	            template: __webpack_require__(31),
 	            link: function link(scope, element) {
 
 	                CategoryFactory.all().then(function (data) {
@@ -82345,13 +81878,37 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 42 */
+/* 31 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"user.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-8\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"user.title\" placeholder=\"Input activity name\">\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"user.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-6\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"user.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-2\">\n                <input type=\"text\" placeholder=\"Enter tags\" class=\"form-control\">\n            </div>\n            <div class=\"col-sm-2\">\n                <button class=\"btn btn-primary\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
-/* 43 */
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	exports['default'] = function (ngModule) {
+
+	    __webpack_require__(33)(ngModule);
+	    __webpack_require__(34)(ngModule);
+
+	    __webpack_require__(37)(ngModule);
+
+	    __webpack_require__(38)(ngModule);
+
+	    __webpack_require__(39)(ngModule);
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82362,11 +81919,430 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodash = __webpack_require__(19);
+	var _lodash = __webpack_require__(13);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _helpers_apiJs = __webpack_require__(22);
+	exports['default'] = function (ngModule) {
+	    return ngModule.factory('SessionService', function ($injector) {
+	        return {
+	            checkAccess: function checkAccess(event, toState, toParams, fromState, fromParams) {
+	                var $scope = $injector.get('$rootScope'),
+	                    $sessionStorage = $injector.get('$sessionStorage');
+
+	                if (!_lodash2['default'].isUndefined(toState.data)) {
+	                    if (!_lodash2['default'].isUndefined(toState.data) && toState.data.needAuth) {
+	                        console.log('Need Auth');
+	                        /**
+	                         * действия для входа БЕЗ авторизации
+	                         */
+
+	                        var strUser = window.localStorage.getItem('user');
+	                        if (strUser) {
+	                            if (!JSON.parse(strUser)) {
+	                                /**
+	                                 * Пользователь не авторизован
+	                                 */
+	                                event.preventDefault();
+	                                $scope.$state.go('auth.login');
+	                            }
+	                        } else {
+	                            event.preventDefault();
+	                            $scope.$state.go('auth.login');
+	                        }
+	                    } else {
+	                        console.log('No Need Auth');
+	                        /**
+	                         * Вход С авторизацией
+	                         */
+	                    }
+	                }
+	            }
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(13);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _helpers_apiJs = __webpack_require__(35);
+
+	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.factory('UserFactory', function (SessionService, $http, $q) {
+	        var url = 'api/v1/auth';
+
+	        return {
+	            auth: function auth(req) {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'POST',
+	                    body: req,
+	                    url: '' + url
+	                });
+
+	                // Wait until data is loaded
+	                request.then(function (data) {
+	                    // If everything is all right
+	                    if (data.status == 200) {
+	                        // Save to localStorage
+	                        window.localStorage.setItem('user', JSON.stringify(data.data));
+
+	                        // Response
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        // Clear localStorage
+	                        window.localStorage.setItem('user', "");
+
+	                        // Reject
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            },
+
+	            login: function login() {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: '' + url
+	                });
+
+	                // Try find this user in localStorage
+	                // if it fail set "GET" request to `${url}`
+	                var strUser = window.localStorage.getItem('user');
+	                if (strUser) {
+	                    var user = JSON.parse(strUser);
+	                    if (!user || !_lodash2['default'].isEmpty(user)) {
+	                        deffered.resolve(user);
+	                    }
+	                }
+
+	                // Wait while data is going to load
+	                request.then(function (data) {
+	                    // If all ok
+	                    if (data.status == 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            },
+
+	            logout: function logout() {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: 'api/v1/user/logout'
+	                });
+
+	                // Wait while data is going to load
+	                request.then(function (data) {
+	                    // If all ok
+
+	                    window.localStorage.setItem('user', '');
+
+	                    if (data.status == 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            },
+
+	            profile: function profile() {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: 'api/v1/user/profile'
+	                });
+
+	                // Wait while data is going to load
+	                request.then(function (data) {
+	                    // If all ok
+	                    if (data.status == 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            }
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _lodash = __webpack_require__(13);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _settingsJs = __webpack_require__(36);
+
+	var _settingsJs2 = _interopRequireDefault(_settingsJs);
+
+	var Request = (function () {
+	    function Request(params, $resource) {
+	        var _this = this;
+
+	        _classCallCheck(this, Request);
+
+	        this.url = params.url;
+	        this.method = params.method || 'get';
+	        this.param = params.param || {};
+	        this.body = params.body || {};
+	        this.methods = params.methods || {};
+	        this.$resource = $resource(_settingsJs2['default'].baseURL + this.url, this.param, this.methods);
+
+	        _lodash2['default'].each(this.methods, function (method, key) {
+	            _lodash2['default'].assign(method, _this.commonMethods());
+	            _this[key] = _this.$resource[key];
+	        });
+	    }
+
+	    _createClass(Request, [{
+	        key: 'commonMethods',
+	        value: function commonMethods() {
+	            return {
+	                method: 'get',
+	                headers: { 'Access-token': 'cf13cf1c287fc0cf5285' }
+	            };
+	        }
+	    }], [{
+	        key: 'http',
+	        value: function http(params) {
+	            if (params.params) params.params = '?' + $.param(params.params);else params.params = '';
+
+	            var deffered = new Promise(function (resolve, reject) {
+	                $.ajax(_settingsJs2['default'].baseURL + params.url + params.params, {
+	                    type: params.method,
+	                    data: params.body,
+	                    headers: {},
+	                    xhrFields: { withCredentials: true },
+	                    crossDomain: true,
+	                    success: function success(res, status, params) {
+	                        //console.log('res: ', res);
+	                        var result = { data: res, status: params.status };
+	                        //console.log('res jQuery: ', result);
+	                        resolve(result);
+	                    },
+	                    error: function error(_error) {
+	                        return reject(_error);
+	                    }
+	                });
+	            });
+
+	            return deffered;
+	        }
+	    }]);
+
+	    return Request;
+	})();
+
+	exports['default'] = Request;
+	module.exports = exports['default'];
+
+/***/ },
+/* 36 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	exports['default'] = {
+	    baseURL: '/'
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(13);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _helpers_apiJs = __webpack_require__(35);
+
+	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.factory('ActivitiesFactory', function (SessionService, $http, $q) {
+	        var url = 'api/v1/activities';
+
+	        return {
+	            all: function all() {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: '' + url
+	                });
+
+	                // Ждем, когда придут данные
+	                request.then(function (data) {
+	                    // Если все ok
+	                    if (data.status == 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            }
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(13);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _helpers_apiJs = __webpack_require__(35);
+
+	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.factory('DashboardFactory', function ($http, $q) {
+	        var url = 'api/v1/dashboard';
+
+	        return {
+	            all: function all() {
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: '' + url
+	                });
+
+	                // Ждем, когда придут данные
+	                request.then(function (data) {
+	                    // Если все ok
+	                    if (data.status === 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                });
+
+	                return deffered.promise;
+	            },
+
+	            getDay: function getDay() {
+	                var day = arguments.length <= 0 || arguments[0] === undefined ? new Date() : arguments[0];
+
+	                var date = {
+	                    year: day.getFullYear().toString(),
+	                    month: (day.getMonth() + 1).toString(),
+	                    day: day.getDate() < 10 ? '0' + day.getDate() : day.getDate().toString()
+	                };
+
+	                var dateString = date.year + '-' + date.month + '-' + date.day;
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'GET',
+	                    url: url + '/' + dateString
+	                });
+
+	                // Ждем, когда придут данные
+	                request.then(function (data) {
+	                    // Если все ok
+	                    if (data.status === 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                }, function () {
+	                    return deffered.reject();
+	                });
+
+	                return deffered.promise;
+	            }
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _lodash = __webpack_require__(13);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _helpers_apiJs = __webpack_require__(35);
 
 	var _helpers_apiJs2 = _interopRequireDefault(_helpers_apiJs);
 
@@ -82399,6 +82375,30 @@
 	};
 
 	module.exports = exports['default'];
+
+/***/ },
+/* 40 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n"
+
+/***/ },
+/* 41 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"content-header\">\n    <h1>Productivity <small>people list</small></h1>\n</section>\n\n<section class=\"content\">\n    <div class=\"col-md-4\" ng-repeat=\"activity in activities\">\n        <div class=\"box box-widget widget-user\">\n            <div class=\"widget-user-header bg-black\" style=\"background: url('https://almsaeedstudio.com/themes/AdminLTE/dist/img/photo1.png') center center;\">\n                <h3 class=\"widget-user-username\">{{ activity.category['title'] }}</h3>\n                <h5 class=\"widget-user-desc\">Hours working: <strong>{{ activity.hours }} / 24</strong></h5>\n                <div class=\"active-circle\" ng-if=\"$root.user.login === activity.user.login\"></div>\n            </div>\n            <div class=\"widget-user-image\">\n                <img class=\"img-circle\" src=\"https://almsaeedstudio.com/themes/AdminLTE/dist/img/user3-128x128.jpg\" alt=\"User Avatar\">\n            </div>\n            <div class=\"box-footer\">\n                <div class=\"row\">\n                    <div class=\"col-sm-4 border-right\">\n                        <div class=\"description-block\">\n                            <h5 class=\"description-header\">{{ activity.date | date: 'dd/MMM/yyyy' }}</h5>\n                            <span class=\"description-text\">Date</span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4 border-right\">\n                        <div class=\"description-block\"\n                             ng-click=\"selectActivity(activity)\"\n                             ng-mouseenter=\"selectActivity(activity)\"\n                             uib-popover-template=\"dynamicPopover.templateUrl\"\n                             popover-title=\"{{ dynamicPopover.title }}\"\n                             popover-placement=\"right\"\n                             popover-trigger=\"mouseenter\">\n                            <h5 class=\"description-header\">{{ activity.tags.length }}</h5>\n                            <span class=\"description-text\">Tags</span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-4\">\n                        <div class=\"description-block\">\n                            <h5 class=\"description-header\">{{ activity.user['name'] }}</h5>\n                            <span class=\"description-text\">User</span>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</section>\n\n<modal-auth></modal-auth>\n\n<script type=\"text/ng-template\" id=\"myPopoverTemplate.html\">\n    <table class=\"table\">\n        <tbody>\n            <tr ng-repeat=\"tag in activeActivity.tags\">\n                <td>{{ tag.title }}</td>\n                <!--<td><div class=\"color\" ng-style=\"{'background': '#3c8dbc'}\">#3c8dbc</div></td>-->\n            </tr>\n        </tbody>\n    </table>\n</script>\n"
+
+/***/ },
+/* 42 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"content-header\">\n    <h1>Profile page</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div ng-class=\"{ 'col-sm-6': activeActivity, 'col-sm-12': !activeActivity }\">\n            <div class=\"box box-default\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Last <strong>{{ activities.length }}</strong> user activities</h3>\n                </div>\n                <div class=\"box-body\">\n                    <ul class=\"timeline\">\n                        <li ng-repeat=\"activity in activitiesList\" ng-class=\"{ 'time-label': activity.view }\" ng-click=\"selectActive(activity)\">\n                            <span ng-if=\"activity.view\">{{ activity.date | date: 'dd/MM/yyyy' }}</span>\n\n                            <i class=\"fa fa-envelope bg-blue\" ng-if=\"!activity.view\"></i>\n                            <div class=\"timeline-item\" ng-if=\"!activity.view\">\n                                <span class=\"time\">\n                                    <i class=\"fa fa-clock-o\"></i>\n                                    {{ activity.date | date: 'dd/MM' }}\n                                </span>\n                                <h3 class=\"timeline-header\">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>\n\n                                <div class=\"timeline-body\" ng-show=\"activity.tags.length\">\n                                    <div>\n                                        <span ng-repeat=\"tag in activity.tags\" class=\"timeline-tag bg-blue\">{{ tag.title }}</span>\n                                    </div>\n                                </div>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-6\">\n            <div class=\"box box-warning\">\n                <location-directive activity=\"activeActivity\"></location-directive>\n            </div>\n        </div>\n    </div>\n\n</section>\n"
+
+/***/ },
+/* 43 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"container\">\n    <h1>This is login page</h1>\n</div>"
 
 /***/ }
 /******/ ]);
