@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Activity;
 use Auth;
+use App\Category;
 
 class ActivityController extends Controller
 {
@@ -60,11 +61,50 @@ class ActivityController extends Controller
         $activity->title = $input['title'];
         $activity->hours = $input['hours'];
         $activity->date = \Carbon\Carbon::now();
+        $activity->category->get();
+
         $activity->save();
 
-        $activity->tags()->attach($input['tags']);
+        if ( isset($input['tags']) ) $activity->tags()->attach($input['tags']);
 
-        return $activity;
+        /**
+         * Return New Application State
+         */
+
+        // Get category types
+        $category_types = Category::all();
+
+        // Get activity to date
+        $activity_to_date = Auth::user()
+                    ->activities()
+                    ->where('date', '=', substr(\Carbon\Carbon::now(), 0, 10))
+                    ->get();
+
+//        return $activity_to_date;
+
+        // Copy category object
+        foreach ( $category_types as $category) {
+            $total_categories[] = [
+                'category' => $category,
+                'hours' => 0
+            ];
+        }
+
+        // Calculate total hours
+        foreach ( $category_types as $category ) {
+            foreach ( $activity_to_date as $activity ) {
+                if ( $category->id == $activity->category_id ) {
+                    for ( $i = 0; $i < count($total_categories); $i++ ) {
+                        if ( $total_categories[$i]['category']->id == $activity->category_id ) {
+                            $total_categories[$i]['hours'] += $activity->hours;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $total_categories;
     }
 
     /**

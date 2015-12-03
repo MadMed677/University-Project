@@ -16,12 +16,13 @@ export default (ngModule) =>
                     let request = { ...scope.activity };
                     request.tags = _.pluck(request.tags, 'id');
                     console.log('request: ', request);
-                    ActivitiesFactory.add(request).then(success);
+                    console.log('activities: ', scope.activities);
+                    ActivitiesFactory.add(request).then( res => {
+                        console.warn('res: ', res);
+                        scope.activities = res;
+                    });
+                    //scope.activities.push(request);
                 };
-
-                function success(data) {
-                    console.log('data: ', data);
-                }
             }
         };
     });

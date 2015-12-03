@@ -55778,6 +55778,8 @@
 
 	                scope.$watch('activities', function (activities) {
 
+	                    console.warn('activities changed', activities);
+
 	                    var array = [];
 	                    _lodash2['default'].each(activities, function (activity) {
 	                        array.push([activity.category.title, activity.hours]);
@@ -55790,7 +55792,7 @@
 
 	                    // Load data to the chart
 	                    chart.load({ columns: array });
-	                });
+	                }, true);
 	            }
 	        };
 	    });
@@ -81883,12 +81885,13 @@
 	                    var request = _extends({}, scope.activity);
 	                    request.tags = _lodash2['default'].pluck(request.tags, 'id');
 	                    console.log('request: ', request);
-	                    ActivitiesFactory.add(request).then(success);
+	                    console.log('activities: ', scope.activities);
+	                    ActivitiesFactory.add(request).then(function (res) {
+	                        console.warn('res: ', res);
+	                        scope.activities = res;
+	                    });
+	                    //scope.activities.push(request);
 	                };
-
-	                function success(data) {
-	                    console.log('data: ', data);
-	                }
 	            }
 	        };
 	    });
@@ -82419,7 +82422,7 @@
 /* 40 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n"
+	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input activities=\"activities\"></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n"
 
 /***/ },
 /* 41 */

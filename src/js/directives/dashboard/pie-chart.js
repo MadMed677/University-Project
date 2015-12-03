@@ -34,6 +34,8 @@ export default (ngModule) =>
 
                 scope.$watch('activities', (activities) => {
 
+                    console.warn('activities changed', activities);
+
                     let array = [];
                     _.each(activities, (activity) => {
                         array.push([
@@ -48,7 +50,7 @@ export default (ngModule) =>
                     // Load data to the chart
                     chart.load({ columns: array });
 
-                });
+                }, true);
 
             }
         };
