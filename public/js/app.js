@@ -42987,7 +42987,7 @@
 	});
 
 	exports['default'] = function (ngModule) {
-	    return ngModule.controller('BodyCtrl', function ($scope, $rootScope, UserFactory) {
+	    return ngModule.controller('BodyCtrl', function ($scope, $rootScope, UserFactory, $state) {
 	        $rootScope.user = null;
 
 	        UserFactory.login().then(function (data) {
@@ -42997,6 +42997,7 @@
 	        $scope.$on('user:logout', function () {
 	            UserFactory.logout().then(function () {
 	                $rootScope.user = null;
+	                $state.go('list');
 	            });
 	        });
 	    });
@@ -81965,11 +81966,11 @@
 	                                 * Пользователь не авторизован
 	                                 */
 	                                event.preventDefault();
-	                                $scope.$state.go('auth.login');
+	                                $scope.$state.go('list');
 	                            }
 	                        } else {
 	                            event.preventDefault();
-	                            $scope.$state.go('auth.login');
+	                            $scope.$state.go('list');
 	                        }
 	                    } else {
 	                        console.log('No Need Auth');
