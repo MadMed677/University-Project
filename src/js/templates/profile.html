@@ -29,7 +29,9 @@
                                     <i class="fa fa-clock-o"></i>
                                     {{ activity.date | date: 'dd/MM' }}
                                 </span>
-                                <h3 class="timeline-header">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>
+                                <h3 class="timeline-header">
+                                    <span>You spend {{ activity.hours }} {{ activity.hours > 1 ? 'hours' : 'hour' }} <span ng-if="activity.title">by "{{ activity.title }}"</span> in {{ activity.category.title }} category.</span>
+                                </h3>
 
                                 <div class="timeline-body" ng-show="activity.tags.length">
                                     <div>
