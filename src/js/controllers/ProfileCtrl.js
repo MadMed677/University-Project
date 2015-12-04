@@ -26,7 +26,7 @@ export default (ngModule) =>
                 });
 
                 // Add data
-                localActivityList.push(newActivity);
+                _.each(newActivity.items, item => localActivityList.push(item));
             });
 
             $scope.activitiesList = localActivityList;

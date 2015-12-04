@@ -43096,7 +43096,9 @@
 	                });
 
 	                // Add data
-	                localActivityList.push(newActivity);
+	                _lodash2['default'].each(newActivity.items, function (item) {
+	                    return localActivityList.push(item);
+	                });
 	            });
 
 	            $scope.activitiesList = localActivityList;
@@ -55744,7 +55746,7 @@
 	var _c32 = _interopRequireDefault(_c3);
 
 	exports['default'] = function (ngModule) {
-	    return ngModule.directive('pieChart', function (UserFactory, $rootScope) {
+	    return ngModule.directive('pieChart', function (UserFactory, $rootScope, $state) {
 	        return {
 	            restrict: 'E',
 	            scope: { activities: '=' },
@@ -55756,7 +55758,10 @@
 	                    bindto: '#chart',
 	                    data: {
 	                        type: 'pie',
-	                        columns: []
+	                        columns: [],
+	                        onclick: function onclick() {
+	                            return $state.go('profile');
+	                        }
 	                    },
 	                    tooltip: {
 	                        show: true,
@@ -82435,7 +82440,7 @@
 /* 42 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Profile page</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div ng-class=\"{ 'col-sm-6': activeActivity, 'col-sm-12': !activeActivity }\">\n            <div class=\"box box-default\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Last <strong>{{ activities.length }}</strong> user activities</h3>\n                </div>\n                <div class=\"box-body\">\n                    <ul class=\"timeline\">\n                        <li ng-repeat=\"activity in activitiesList\" ng-class=\"{ 'time-label': activity.view }\" ng-click=\"selectActive(activity)\">\n                            <span ng-if=\"activity.view\">{{ activity.date | date: 'dd/MM/yyyy' }}</span>\n\n                            <i class=\"fa fa-envelope bg-blue\" ng-if=\"!activity.view\"></i>\n                            <div class=\"timeline-item\" ng-if=\"!activity.view\">\n                                <span class=\"time\">\n                                    <i class=\"fa fa-clock-o\"></i>\n                                    {{ activity.date | date: 'dd/MM' }}\n                                </span>\n                                <h3 class=\"timeline-header\">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>\n\n                                <div class=\"timeline-body\" ng-show=\"activity.tags.length\">\n                                    <div>\n                                        <span ng-repeat=\"tag in activity.tags\" class=\"timeline-tag bg-blue\">{{ tag.title }}</span>\n                                    </div>\n                                </div>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-6\">\n            <div class=\"box box-warning\">\n                <location-directive activity=\"activeActivity\"></location-directive>\n            </div>\n        </div>\n    </div>\n\n</section>\n"
+	module.exports = "<section class=\"content-header\">\n    <h1>Profile page</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-sm-6\">\n            <div class=\"box box-default\">\n                <div class=\"box-header\">\n                    <h3 class=\"box-title\">Last <strong>{{ activities.length }}</strong> user activities</h3>\n                </div>\n                <div class=\"box-body\">\n                    <ul class=\"timeline\">\n                        <li ng-repeat=\"activity in activitiesList\" ng-class=\"{ 'time-label': activity.view }\" ng-click=\"selectActive(activity)\">\n                            <span ng-if=\"activity.view\">{{ activity.date | date: 'dd/MM/yyyy' }}</span>\n\n                            <span ng-switch=\"activity.category.title.toLowerCase()\" ng-if=\"!activity.view\">\n                                <i ng-switch-when=\"rest\" class=\"fa fa-bed bg-orange\"></i>\n                                <i ng-switch-when=\"neutral\" class=\"fa\"></i>\n                                <i ng-switch-when=\"sport\" class=\"fa fa-soccer-ball-o bg-blue\"></i>\n                                <i ng-switch-when=\"productivity\" class=\"fa fa-user bg-green\"></i>\n                                <i ng-switch-when=\"entertainment\" class=\"fa fa-gamepad bg-red\"></i>\n                                <i ng-switch-default class=\"fa\"></i>\n                            </span>\n\n                            <div class=\"timeline-item\" ng-if=\"!activity.view\">\n                                <span class=\"time\">\n                                    <i class=\"fa fa-clock-o\"></i>\n                                    {{ activity.date | date: 'dd/MM' }}\n                                </span>\n                                <h3 class=\"timeline-header\">You spend {{ activity.hours }} hours for {{ activity.category.title }} category</h3>\n\n                                <div class=\"timeline-body\" ng-show=\"activity.tags.length\">\n                                    <div>\n                                        <span ng-repeat=\"tag in activity.tags\" class=\"timeline-tag bg-blue\">{{ tag.title }}</span>\n                                    </div>\n                                </div>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-6\">\n            <div class=\"box box-warning\">\n                <location-directive activity=\"activeActivity\"></location-directive>\n            </div>\n        </div>\n    </div>\n\n</section>\n"
 
 /***/ },
 /* 43 */

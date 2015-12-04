@@ -3,7 +3,7 @@ import d3                   from 'd3';
 import c3                   from 'c3';
 
 export default (ngModule) =>
-    ngModule.directive('pieChart', (UserFactory, $rootScope) => {
+    ngModule.directive('pieChart', (UserFactory, $rootScope, $state) => {
         return {
             restrict: 'E',
             scope: { activities: '=' },
@@ -15,7 +15,8 @@ export default (ngModule) =>
                     bindto: '#chart',
                     data: {
                         type: 'pie',
-                        columns: []
+                        columns: [],
+                        onclick: () => $state.go('profile')
                     },
                     tooltip: {
                         show: true,

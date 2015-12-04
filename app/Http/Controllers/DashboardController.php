@@ -28,29 +28,35 @@ class DashboardController extends Controller
                                 ->where('date', '=', $date)
                                 ->get();
 
+        $result = [];
         // Copy category object
         foreach ( $category_types as $category) {
-            $total_categories[] = [
-                'category' => $category,
-                'hours' => 0
+            $result[$category->id] = [
+                "hours" => 0,
+                "category" => $category,
             ];
         }
 
         // Calculate total hours
-        foreach ( $category_types as $category ) {
-            foreach ( $activity_to_date as $activity ) {
-                if ( $category->id == $activity->category_id ) {
-                    for ( $i = 0; $i < count($total_categories); $i++ ) {
-                        if ( $total_categories[$i]['category']->id == $activity->category_id ) {
-                            $total_categories[$i]['hours'] += $activity->hours;
-                            break;
-                        }
-                    }
-                }
-            }
+        foreach ( $activity_to_date as $activity ) {
+            $result[$activity->category_id]['hours'] += $activity->hours;
         }
 
-        return $total_categories;
+        return $result;
+
+
+
+        /**
+         * It works but we can do something like that:
+         *
+         * SELECT c.id, c.title, SUM(ua.hours) as hours
+         * FROM categories c
+         * JOIN user_activities ua ON c.id = ua.category_id
+         * WHERE ua.user_id = 1
+         * GROUP BY c.id
+         *
+         * But I don't know how Laravel can do it
+         */
     }
 
     /**

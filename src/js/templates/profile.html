@@ -5,7 +5,7 @@
 <section class="content">
 
     <div class="row">
-        <div ng-class="{ 'col-sm-6': activeActivity, 'col-sm-12': !activeActivity }">
+        <div class="col-sm-6">
             <div class="box box-default">
                 <div class="box-header">
                     <h3 class="box-title">Last <strong>{{ activities.length }}</strong> user activities</h3>
@@ -15,7 +15,15 @@
                         <li ng-repeat="activity in activitiesList" ng-class="{ 'time-label': activity.view }" ng-click="selectActive(activity)">
                             <span ng-if="activity.view">{{ activity.date | date: 'dd/MM/yyyy' }}</span>
 
-                            <i class="fa fa-envelope bg-blue" ng-if="!activity.view"></i>
+                            <span ng-switch="activity.category.title.toLowerCase()" ng-if="!activity.view">
+                                <i ng-switch-when="rest" class="fa fa-bed bg-orange"></i>
+                                <i ng-switch-when="neutral" class="fa"></i>
+                                <i ng-switch-when="sport" class="fa fa-soccer-ball-o bg-blue"></i>
+                                <i ng-switch-when="productivity" class="fa fa-user bg-green"></i>
+                                <i ng-switch-when="entertainment" class="fa fa-gamepad bg-red"></i>
+                                <i ng-switch-default class="fa"></i>
+                            </span>
+
                             <div class="timeline-item" ng-if="!activity.view">
                                 <span class="time">
                                     <i class="fa fa-clock-o"></i>
