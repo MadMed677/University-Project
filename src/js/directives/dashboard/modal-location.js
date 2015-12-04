@@ -19,10 +19,6 @@ export default (ngModule) =>
                     map = new ymaps.Map(ymapId, {
                         center: [0,0],
                         zoom: 16,
-                        //options: {
-                        //    minZoom: 16,
-                        //    maxZoom: 16,
-                        //},
                         //controls: []
                     });
 
@@ -36,6 +32,11 @@ export default (ngModule) =>
                         placemark = new ymaps.Placemark(coords, { hintContent: `This location` });
                         // Add new placemark to the map
                         map.geoObjects.add(placemark);
+
+                        scope.position = {
+                            latitude: coords[0],
+                            longitude: coords[1]
+                        };
                     });
 
                     window.navigator.geolocation.getCurrentPosition( (position) => {
@@ -62,6 +63,10 @@ export default (ngModule) =>
                     });
                 });
 
+                scope.setLocation = () => {
+                    $rootScope.$emit('location:set', scope.position);
+                    modal.modal('hide');
+                }
 
                 $rootScope.$on('modalLocation:show', () => modal.modal('show'));
 

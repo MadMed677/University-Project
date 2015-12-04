@@ -83813,10 +83813,16 @@
 	                CategoryFactory.all().then(function (data) {
 	                    return scope.categories = data;
 	                });
+	                // Set location
+	                $rootScope.$on('location:set', function (e, location) {
+	                    scope.activity.location = location;
+	                    console.log('activity: ', scope.activity);
+	                });
 
 	                scope.add = function () {
 	                    var request = _extends({}, scope.activity);
 	                    request.tags = _lodash2['default'].pluck(request.tags, 'id');
+	                    console.log('req: ', request);
 
 	                    ActivitiesFactory.add(request).then(function (res) {
 	                        console.warn('res: ', res);
@@ -83838,7 +83844,7 @@
 /* 32 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\" ng-click=\"showModalLocation()\"><i class=\"fa fa-map-marker\"></i></button>\n            <button class=\"btn btn-box-tool\"><i class=\"fa fa-tags\"></i></button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\" ng-class=\"{ 'success': activity.location.latitude }\" ng-click=\"showModalLocation()\"><i class=\"fa fa-map-marker\"></i></button>\n            <button class=\"btn btn-box-tool\"><i class=\"fa fa-tags\"></i></button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 33 */
@@ -83877,10 +83883,6 @@
 	                        zoom: 16
 	                    });
 
-	                    //options: {
-	                    //    minZoom: 16,
-	                    //    maxZoom: 16,
-	                    //},
 	                    //controls: []
 	                    map.events.add('click', function (event) {
 	                        // Get new coords
@@ -83892,6 +83894,11 @@
 	                        placemark = new ymaps.Placemark(coords, { hintContent: 'This location' });
 	                        // Add new placemark to the map
 	                        map.geoObjects.add(placemark);
+
+	                        scope.position = {
+	                            latitude: coords[0],
+	                            longitude: coords[1]
+	                        };
 	                    });
 
 	                    window.navigator.geolocation.getCurrentPosition(function (position) {
@@ -83915,6 +83922,11 @@
 	                    });
 	                });
 
+	                scope.setLocation = function () {
+	                    $rootScope.$emit('location:set', scope.position);
+	                    modal.modal('hide');
+	                };
+
 	                $rootScope.$on('modalLocation:show', function () {
 	                    return modal.modal('show');
 	                });
@@ -83929,7 +83941,7 @@
 /* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\" id=\"myModalLocation\">\n    <div class=\"modal-dialog\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span\n                        aria-hidden=\"true\">&times;</span></button>\n                <h4 class=\"modal-title\">Location</h4>\n            </div>\n            <div class=\"modal-body\">\n                <div id=\"activity-map\" class=\"map-container\"></div>\n            </div>\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n                <button type=\"submit\" class=\"btn btn-primary\" ng-click=\"formAuthorize()\">Authorize</button>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\" id=\"myModalLocation\">\n    <div class=\"modal-dialog\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span\n                        aria-hidden=\"true\">&times;</span></button>\n                <h4 class=\"modal-title\">Location</h4>\n            </div>\n            <div class=\"modal-body\">\n                <div id=\"activity-map\" class=\"map-container\"></div>\n            </div>\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n                <button type=\"submit\" class=\"btn btn-primary\" ng-click=\"setLocation()\">Set location</button>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 35 */

@@ -11,10 +11,16 @@ export default (ngModule) =>
                 TagFactory.all().then( data => scope.tagsList = data );
                 // Get all categories
                 CategoryFactory.all().then( data => scope.categories = data );
+                // Set location
+                $rootScope.$on('location:set', (e, location) => {
+                    scope.activity.location = location
+                    console.log('activity: ', scope.activity);
+                });
 
                 scope.add = () => {
                     let request = { ...scope.activity };
                     request.tags = _.pluck(request.tags, 'id');
+                    console.log('req: ', request);
 
                     ActivitiesFactory.add(request).then( res => {
                         console.warn('res: ', res);
