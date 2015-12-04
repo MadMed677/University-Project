@@ -1,0 +1,29 @@
+<div class="box box-default">
+    <div class="box-header">
+        <h3 class="box-title">Input New Activity</h3>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-sm-2">
+                <select name="categories" id="categories" ng-model="activity.category" class="form-control">
+                    <option ng-repeat="category in categories" value="{{ category.id }}">{{ category.title }}</option>
+                </select>
+            </div>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" ng-model="activity.title" placeholder="Input activity name">
+            </div>
+            <div class="col-sm-1">
+                <input type="number" class="form-control" ng-model="activity.hours" placeholder="3">
+            </div>
+            <div class="col-sm-3">
+                <ui-select multiple ng-model="activity.tags" theme="select2">
+                    <ui-select-match placeholder="Select tags...">{{ $item.title }}</ui-select-match>
+                    <ui-select-choices repeat="tag in tagsList">{{ tag.title }}</ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-sm-1 text-center">
+                <button class="btn btn-primary" ng-click="add()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>

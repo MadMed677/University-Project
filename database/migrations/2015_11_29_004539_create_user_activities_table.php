@@ -17,7 +17,8 @@ class CreateUserActivitiesTable extends Migration
 
             // Add 'category_id' constraint
             $table->integer('category_id')->unsigned();
-            $table->integer('location_id')->unsigned();
+//            $table->integer('location_id')->unsigned()->nullable();
+            $table->integer('location_id')->unsigned()->nullable();
             $table->integer('user_id')->unsigned();
             $table->date('date');
             $table->double('hours', 5);

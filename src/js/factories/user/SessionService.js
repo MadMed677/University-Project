@@ -21,11 +21,11 @@ ngModule.factory('SessionService', ($injector) => {
                               * Пользователь не авторизован
                               */
                               event.preventDefault();
-                              $scope.$state.go('auth.login');
+                              $scope.$state.go('list');
                          }
                      } else {
                          event.preventDefault();
-                         $scope.$state.go('auth.login');
+                         $scope.$state.go('list');
                      }
                 } else {
                     console.log('No Need Auth');

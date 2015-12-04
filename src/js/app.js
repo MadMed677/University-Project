@@ -1,10 +1,12 @@
 import angular                  from 'angular';
 import 'ngstorage';
 import 'angular-bootstrap-npm';
+import 'ui-select';
 
 const ngModule                  = angular.module('university', [
     require('angular-ui-router'),
     require('angular-resource'),
+    'ui.select',
     'ui.bootstrap',
     'ngStorage'
 ]);

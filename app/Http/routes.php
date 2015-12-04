@@ -16,8 +16,7 @@ Route::resource('/api/v1/activities', 'ActivityController');
 Route::resource('/api/v1/auth', 'UserController');
 Route::get('/api/v1/user/logout', 'UserController@logout');
 Route::get('/api/v1/user/profile', 'UserController@profile');
-//
-// Route::controllers([
-//     'auth' => 'Auth\AuthController',
-//     'password' => 'Auth\PasswordController'
-// ]);
+Route::get('/api/v1/categories', 'CategoryController@index');
+Route::get('/api/v1/tags', 'TagController@index');
+
+Route::resource('/api/v1/dashboard/{date?}', 'DashboardController');

@@ -4,83 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Activity;
 use Auth;
 use App\Category;
+use App\Http\Requests;
+use App\Http\Input;
+use App\Http\Controllers\Controller;
 
-class ActivityController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($date = null)
     {
-        $activities = Activity::all();
-
-        foreach ($activities as $activity) {
-            $activity->user->get();
-            $activity->location->get();
-            $activity->category->get();
-            $activity->tags->all();
-        }
-
-        return $activities;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $input = $request->all();
-        $input['category'] = intval($input['category']);
-        $input['hours'] = floatval($input['hours']);
-
-//        return $input;
-        $activity = new Activity;
-        $activity->category_id = $input['category'];
-        $activity->location_id = 1;
-        $activity->user_id = Auth::id();
-        $activity->title = $input['title'];
-        $activity->hours = $input['hours'];
-        $activity->date = \Carbon\Carbon::now();
-        $activity->category->get();
-
-        $activity->save();
-
-        if ( isset($input['tags']) ) $activity->tags()->attach($input['tags']);
-
-        /**
-         * Return New Application State
-         */
-
         // Get category types
         $category_types = Category::all();
 
         // Get activity to date
         $activity_to_date = Auth::user()
-                    ->activities()
-                    ->where('date', '=', substr(\Carbon\Carbon::now(), 0, 10))
-                    ->get();
-
-//        return $activity_to_date;
+                                ->activities()
+                                ->where('date', '=', $date)
+                                ->get();
 
         // Copy category object
         foreach ( $category_types as $category) {
@@ -108,14 +54,35 @@ class ActivityController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($date)
     {
-        //
+        return \Carbon\Carbon::now();
     }
 
     /**
