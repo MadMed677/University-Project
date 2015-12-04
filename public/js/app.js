@@ -57614,7 +57614,6 @@
 	                    });
 	                });
 
-	                console.log('activity: ', scope.activity);
 	                scope.$watch('activity', function (newActivity) {
 	                    if (!_lodash2['default'].isEmpty(newActivity)) {
 	                        console.log('newActivity: ', newActivity);
@@ -83805,6 +83804,8 @@
 	            scope: { activities: '=', activity: '=' },
 	            template: __webpack_require__(32),
 	            link: function link(scope, element) {
+	                scope.showLocationTooltip = false;
+
 	                // Get all tags
 	                TagFactory.all().then(function (data) {
 	                    return scope.tagsList = data;
@@ -83816,18 +83817,28 @@
 	                // Set location
 	                $rootScope.$on('location:set', function (e, location) {
 	                    scope.activity.location = location;
-	                    console.log('activity: ', scope.activity);
+
+	                    if (scope.activity.location) {
+	                        var _location = scope.activity.location;
+	                        ymaps.geocode([_location.latitude, _location.longitude]).then(function (res) {
+	                            scope.activity.location.name = res.geoObjects.get(0).properties.get('name');
+	                            scope.showLocationTooltip = true;
+	                        });
+	                    }
 	                });
 
 	                scope.add = function () {
 	                    var request = _extends({}, scope.activity);
 	                    request.tags = _lodash2['default'].pluck(request.tags, 'id');
-	                    console.log('req: ', request);
 
 	                    ActivitiesFactory.add(request).then(function (res) {
-	                        console.warn('res: ', res);
 	                        scope.activities = res;
 	                    });
+	                };
+
+	                scope.dynamicPopover = {
+	                    templateUrl: 'tagsTemplate.html',
+	                    title: 'Location'
 	                };
 
 	                scope.showModalLocation = function () {
@@ -83844,7 +83855,7 @@
 /* 32 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\" ng-class=\"{ 'success': activity.location.latitude }\" ng-click=\"showModalLocation()\"><i class=\"fa fa-map-marker\"></i></button>\n            <button class=\"btn btn-box-tool\"><i class=\"fa fa-tags\"></i></button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\"\n                    ng-class=\"{ 'success': activity.location.latitude }\"\n                    ng-click=\"showModalLocation()\"\n                    uib-popover-template=\"dynamicPopover.templateUrl\"\n                    popover-title=\"{{ dynamicPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-enable=\"{{ showLocationTooltip }}\"\n                    popover-trigger=\"mouseenter\">\n                <i class=\"fa fa-map-marker\"></i>\n            </button>\n            <button class=\"btn btn-box-tool\"><i class=\"fa fa-tags\"></i></button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<script type=\"text/ng-template\" id=\"tagsTemplate.html\">\n    <div>{{ activity.location.name }}</div>\n</script>"
 
 /***/ },
 /* 33 */

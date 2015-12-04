@@ -2,7 +2,16 @@
     <div class="box-header">
         <h3 class="box-title">Input New Activity</h3>
         <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" ng-class="{ 'success': activity.location.latitude }" ng-click="showModalLocation()"><i class="fa fa-map-marker"></i></button>
+            <button class="btn btn-box-tool"
+                    ng-class="{ 'success': activity.location.latitude }"
+                    ng-click="showModalLocation()"
+                    uib-popover-template="dynamicPopover.templateUrl"
+                    popover-title="{{ dynamicPopover.title }}"
+                    popover-placement="right"
+                    popover-enable="{{ showLocationTooltip }}"
+                    popover-trigger="mouseenter">
+                <i class="fa fa-map-marker"></i>
+            </button>
             <button class="btn btn-box-tool"><i class="fa fa-tags"></i></button>
         </div>
     </div>
@@ -31,3 +40,7 @@
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="tagsTemplate.html">
+    <div>{{ activity.location.name }}</div>
+</script>

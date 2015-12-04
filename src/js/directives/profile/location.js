@@ -27,7 +27,6 @@ export default (ngModule) =>
                     });
                 });
 
-                console.log('activity: ', scope.activity);
                 scope.$watch('activity', (newActivity) => {
                     if ( !_.isEmpty(newActivity) ) {
                         console.log('newActivity: ', newActivity);
@@ -49,7 +48,6 @@ export default (ngModule) =>
 
                         // Add new placemark to the map
                         map.geoObjects.add(placemark);
-
                     }
                 });
             }
