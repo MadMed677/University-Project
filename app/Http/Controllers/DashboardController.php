@@ -28,29 +28,21 @@ class DashboardController extends Controller
                                 ->where('date', '=', $date)
                                 ->get();
 
+        $result = [];
         // Copy category object
         foreach ( $category_types as $category) {
-            $total_categories[] = [
-                'category' => $category,
-                'hours' => 0
+            $result[$category->id] = [
+                "hours" => 0,
+                "category" => $category,
             ];
         }
 
         // Calculate total hours
-        foreach ( $category_types as $category ) {
-            foreach ( $activity_to_date as $activity ) {
-                if ( $category->id == $activity->category_id ) {
-                    for ( $i = 0; $i < count($total_categories); $i++ ) {
-                        if ( $total_categories[$i]['category']->id == $activity->category_id ) {
-                            $total_categories[$i]['hours'] += $activity->hours;
-                            break;
-                        }
-                    }
-                }
-            }
+        foreach ( $activity_to_date as $activity ) {
+            $result[$activity->category_id]['hours'] += $activity->hours;
         }
 
-        return $total_categories;
+        return $result;
     }
 
     /**
