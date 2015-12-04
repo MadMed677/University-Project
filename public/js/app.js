@@ -43096,7 +43096,9 @@
 	                });
 
 	                // Add data
-	                localActivityList.push(newActivity);
+	                _lodash2['default'].each(newActivity.items, function (item) {
+	                    return localActivityList.push(item);
+	                });
 	            });
 
 	            $scope.activitiesList = localActivityList;

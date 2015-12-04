@@ -28,21 +28,43 @@ class UserController extends Controller
 
     public function profile() {
 
+        // Get activities for User
         $activities = Auth::user()
                             ->activities()
                             ->take(10)
                             ->orderBy('date', 'asc')
                             ->get();
 
+        // Get Location, Category and Tags
         foreach ( $activities as $activity ) {
             $activity->category->get();
             $activity->location->get();
             $activity->tags->all();
         }
 
+        // Group by 'Date'
+        $total_activities = [];
+        foreach ( $activities as $activity ) {
+            $find = false;
+            for ( $i = 0; $i < count($total_activities); $i++ ) {
+                if ( $total_activities[$i]['date'] == $activity['date'] ) {
+                    array_push($total_activities[$i]['items'], $activity);
+                    $find = true;
+                    break;
+                }
+            }
+
+            if ( !$find ) {
+                $total_activities[$i] = [
+                    'date' => $activity['date'],
+                    'items' => [$activity]
+                ];
+            }
+        }
+
         return [
             'user' => Auth::user(),
-            'activities' => $activities
+            'activities' => $total_activities
         ];
     }
 
