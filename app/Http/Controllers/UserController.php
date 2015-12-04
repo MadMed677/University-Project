@@ -31,8 +31,8 @@ class UserController extends Controller
         // Get activities for User
         $activities = Auth::user()
                             ->activities()
-                            ->take(10)
-                            ->orderBy('date', 'asc')
+                            ->take(30)
+                            ->orderBy('date', 'desc')
                             ->get();
 
         // Get Location, Category and Tags
