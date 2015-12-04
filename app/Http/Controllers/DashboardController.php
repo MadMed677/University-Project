@@ -43,6 +43,20 @@ class DashboardController extends Controller
         }
 
         return $result;
+
+
+
+        /**
+         * It works but we can do something like that:
+         *
+         * SELECT c.id, c.title, SUM(ua.hours) as hours
+         * FROM categories c
+         * JOIN user_activities ua ON c.id = ua.category_id
+         * WHERE ua.user_id = 1
+         * GROUP BY c.id
+         *
+         * But I don't know how Laravel can do it
+         */
     }
 
     /**
