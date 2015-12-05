@@ -36,8 +36,13 @@ export default (ngModule) =>
                 };
 
                 scope.dynamicPopover = {
-                    templateUrl: 'tagsTemplate.html',
+                    templateUrl: 'locationTemplate.html',
                     title: 'Location'
+                };
+
+                scope.tagsPopover = {
+                    templateUrl: 'tagsTemplate.html',
+                    title: 'Create new tags'
                 };
 
                 scope.showModalLocation = () => $rootScope.$emit('modalLocation:show');
