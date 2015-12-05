@@ -31,7 +31,7 @@
             <div class="col-sm-3">
                 <ui-select multiple ng-model="activity.tags" theme="select2">
                     <ui-select-match placeholder="Select tags...">{{ $item.title }}</ui-select-match>
-                    <ui-select-choices repeat="tag in tagsList">{{ tag.title }}</ui-select-choices>
+                    <ui-select-choices repeat="tag in tagsList | propsFilter: { title: $select.search }">{{ tag.title }}</ui-select-choices>
                 </ui-select>
             </div>
             <div class="col-sm-1 text-center">

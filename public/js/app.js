@@ -63,6 +63,7 @@
 	/* Loading Controllers */__webpack_require__(9)(ngModule);
 	/* Loading Directives */__webpack_require__(17)(ngModule);
 	/* Loading Factories */__webpack_require__(35)(ngModule);
+	/* Loading Filters */__webpack_require__(48)(ngModule);
 
 	ngModule.config(function ($stateProvider, $locationProvider, $httpProvider) {
 
@@ -83855,7 +83856,7 @@
 /* 32 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\"\n                    ng-class=\"{ 'success': activity.location.latitude }\"\n                    ng-click=\"showModalLocation()\"\n                    uib-popover-template=\"dynamicPopover.templateUrl\"\n                    popover-title=\"{{ dynamicPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-enable=\"{{ showLocationTooltip }}\"\n                    popover-trigger=\"mouseenter\">\n                <i class=\"fa fa-map-marker\"></i>\n            </button>\n            <button class=\"btn btn-box-tool\"><i class=\"fa fa-tags\"></i></button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<script type=\"text/ng-template\" id=\"tagsTemplate.html\">\n    <div>{{ activity.location.name }}</div>\n</script>"
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\"\n                    ng-class=\"{ 'success': activity.location.latitude }\"\n                    ng-click=\"showModalLocation()\"\n                    uib-popover-template=\"dynamicPopover.templateUrl\"\n                    popover-title=\"{{ dynamicPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-enable=\"{{ showLocationTooltip }}\"\n                    popover-trigger=\"mouseenter\">\n                <i class=\"fa fa-map-marker\"></i>\n            </button>\n            <button class=\"btn btn-box-tool\"><i class=\"fa fa-tags\"></i></button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList | propsFilter: { title: $select.search }\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<script type=\"text/ng-template\" id=\"tagsTemplate.html\">\n    <div>{{ activity.location.name }}</div>\n</script>"
 
 /***/ },
 /* 33 */
@@ -84563,6 +84564,78 @@
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"container\">\n    <h1>This is login page</h1>\n</div>"
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	exports['default'] = function (ngModule) {
+
+	    __webpack_require__(49)(ngModule);
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _lodash = __webpack_require__(14);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.filter('propsFilter', function () {
+	        return function (items, props) {
+	            var out = [];
+
+	            if (_angular2['default'].isArray(items)) {
+	                items.forEach(function (item) {
+	                    var itemMatches = false;
+
+	                    var keys = Object.keys(props);
+	                    for (var i = 0; i < keys.length; i++) {
+	                        var prop = keys[i];
+	                        var text = props[prop].toLowerCase();
+	                        if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+	                            itemMatches = true;
+	                            break;
+	                        }
+	                    }
+
+	                    if (itemMatches) {
+	                        out.push(item);
+	                    }
+	                });
+	            } else {
+	                // Let the output be the input untouched
+	                out = items;
+	            }
+
+	            return out;
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);
