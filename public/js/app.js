@@ -83849,10 +83849,11 @@
 	                };
 
 	                scope.submit = function () {
-	                    TagFactory.save(scope.tagsPopover.tag).then(function (data) {
-	                        console.log('data: ', data);
-	                    }, function () {
-	                        return console.error('reject???');
+	                    TagFactory.save(scope.tagsPopover.tag).then(function () {
+	                        // Grab updated data from the
+	                        TagFactory.all().then(function (data) {
+	                            return scope.tagsList = data;
+	                        });
 	                    });
 	                };
 
