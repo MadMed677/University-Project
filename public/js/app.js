@@ -57454,6 +57454,7 @@
 
 	    __webpack_require__(18)(ngModule);
 	    __webpack_require__(20)(ngModule);
+	    __webpack_require__(50)(ngModule);
 
 	    __webpack_require__(22)(ngModule);
 
@@ -83847,6 +83848,11 @@
 	                    title: 'Create new tags'
 	                };
 
+	                scope.submit = function (e) {
+	                    console.log('e: ', e);
+	                    console.log(scope.tagsPopover.tag);
+	                };
+
 	                scope.showModalLocation = function () {
 	                    return $rootScope.$emit('modalLocation:show');
 	                };
@@ -83861,7 +83867,7 @@
 /* 32 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\"\n                    ng-class=\"{ 'success': activity.location.latitude }\"\n                    ng-click=\"showModalLocation()\"\n                    uib-popover-template=\"dynamicPopover.templateUrl\"\n                    popover-title=\"{{ dynamicPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-enable=\"{{ showLocationTooltip }}\"\n                    popover-trigger=\"mouseenter\">\n                <i class=\"fa fa-map-marker\"></i>\n            </button>\n            <button class=\"btn btn-box-tool tags\"\n                    uib-popover-template=\"tagsPopover.templateUrl\"\n                    popover-title=\"{{ tagsPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-trigger=\"click\">\n                <i class=\"fa fa-tags\"></i>\n            </button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList | propsFilter: { title: $select.search }\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<script type=\"text/ng-template\" id=\"locationTemplate.html\">\n    <div>{{ activity.location.name }}</div>\n</script>\n\n<script type=\"text/ng-template\" id=\"tagsTemplate.html\">\n    <div>Input new tags below</div>\n    <br>\n    <div>\n        <input type=\"text\" class=\"form-control\" placeholder=\"Tags\">\n    </div>\n</script>\n"
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\"\n                    ng-class=\"{ 'success': activity.location.latitude }\"\n                    ng-click=\"showModalLocation()\"\n                    uib-popover-template=\"dynamicPopover.templateUrl\"\n                    popover-title=\"{{ dynamicPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-enable=\"{{ showLocationTooltip }}\"\n                    popover-trigger=\"mouseenter\">\n                <i class=\"fa fa-map-marker\"></i>\n            </button>\n            <button class=\"btn btn-box-tool tags\"\n                    uib-popover-template=\"tagsPopover.templateUrl\"\n                    popover-title=\"{{ tagsPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-trigger=\"click\">\n                <i class=\"fa fa-tags\"></i>\n            </button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList | propsFilter: { title: $select.search }\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<script type=\"text/ng-template\" id=\"locationTemplate.html\">\n    <div>{{ activity.location.name }}</div>\n</script>\n\n<script type=\"text/ng-template\" id=\"tagsTemplate.html\">\n    <div>\n        <input type=\"text\" class=\"form-control\" placeholder=\"Tags\" ng-model=\"tagsPopover.tag\" input-on-enter=\"submit()\">\n    </div>\n</script>\n"
 
 /***/ },
 /* 33 */
@@ -84636,6 +84642,33 @@
 	            }
 
 	            return out;
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 50 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.directive('inputOnEnter', function () {
+	        return function (scope, element, attrs) {
+	            element.bind('keydown keypress', function (event) {
+	                if (event.which == 13) {
+	                    scope.$apply(function () {
+	                        return scope.$eval(attrs.inputOnEnter);
+	                    });
+	                    event.preventDefault();
+	                }
+	            });
 	        };
 	    });
 	};

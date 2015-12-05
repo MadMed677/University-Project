@@ -45,6 +45,11 @@ export default (ngModule) =>
                     title: 'Create new tags'
                 };
 
+                scope.submit = (e) => {
+                    console.log('e: ', e);
+                    console.log(scope.tagsPopover.tag);
+                };
+
                 scope.showModalLocation = () => $rootScope.$emit('modalLocation:show');
             }
         };

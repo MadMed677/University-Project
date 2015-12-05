@@ -52,9 +52,7 @@
 </script>
 
 <script type="text/ng-template" id="tagsTemplate.html">
-    <div>Input new tags below</div>
-    <br>
     <div>
-        <input type="text" class="form-control" placeholder="Tags">
+        <input type="text" class="form-control" placeholder="Tags" ng-model="tagsPopover.tag" input-on-enter="submit()">
     </div>
 </script>
