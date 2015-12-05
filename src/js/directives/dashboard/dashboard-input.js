@@ -26,6 +26,10 @@ export default (ngModule) =>
                     }
                 });
 
+                scope.$watch('activity.tags', (newTags) => {
+                    console.log('newTags: ', newTags);
+                }, true);
+
                 scope.add = () => {
                     let request = { ...scope.activity };
                     request.tags = _.pluck(request.tags, 'id');
