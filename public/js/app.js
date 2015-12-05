@@ -83848,9 +83848,12 @@
 	                    title: 'Create new tags'
 	                };
 
-	                scope.submit = function (e) {
-	                    console.log('e: ', e);
-	                    console.log(scope.tagsPopover.tag);
+	                scope.submit = function () {
+	                    TagFactory.save(scope.tagsPopover.tag).then(function (data) {
+	                        console.log('data: ', data);
+	                    }, function () {
+	                        return console.error('reject???');
+	                    });
 	                };
 
 	                scope.showModalLocation = function () {
@@ -84537,12 +84540,16 @@
 	                });
 
 	                request.then(function (data) {
+	                    console.log('here: ', data);
 	                    if (data.status === 200) {
+	                        console.log('and here: ', data);
 	                        deffered.resolve(data.data);
 	                    } else {
 	                        deffered.reject();
 	                    }
-	                }, deffered.reject());
+	                }, function () {
+	                    return deffered.reject();
+	                });
 
 	                return deffered.promise;
 	            }

@@ -37,12 +37,14 @@ export default (ngModule) =>
                 });
 
                 request.then( (data) => {
+                    console.log('here: ', data);
                     if ( data.status === 200 ) {
+                        console.log('and here: ', data);
                         deffered.resolve(data.data);
                     } else {
                         deffered.reject();
                     }
-                }, deffered.reject());
+                }, () => deffered.reject());
 
                 return deffered.promise;
             }

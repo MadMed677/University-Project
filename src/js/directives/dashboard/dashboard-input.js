@@ -45,9 +45,10 @@ export default (ngModule) =>
                     title: 'Create new tags'
                 };
 
-                scope.submit = (e) => {
-                    console.log('e: ', e);
-                    console.log(scope.tagsPopover.tag);
+                scope.submit = () => {
+                    TagFactory.save(scope.tagsPopover.tag).then( data => {
+                        console.log('data: ', data);
+                    }, () => console.error('reject???'));
                 };
 
                 scope.showModalLocation = () => $rootScope.$emit('modalLocation:show');

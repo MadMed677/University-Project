@@ -41,8 +41,10 @@ class TagController extends Controller
         $tags = $request->input('tags');
         $result = [];
 
+        if ( !isset($tags) ) return $result;
+
         foreach ( $tags as $tag ) {
-            $t = Tag::create(['title' => $tag['title']]);
+            $t = Tag::create(['title' => $tag]);
 
             if ( isset($t) ) $result[] = $t->id;
         }
