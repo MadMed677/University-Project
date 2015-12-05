@@ -24,6 +24,27 @@ export default (ngModule) =>
                 });
 
                 return deffered.promise;
+            },
+
+            save(tags = []) {
+                if ( !_.isArray(tags) ) tags = [tags];
+
+                const deffered = $q.defer();
+                const request = new Request.http({
+                    method: 'POST',
+                    url: `${url}`,
+                    body: { tags }
+                });
+
+                request.then( (data) => {
+                    if ( data.status === 200 ) {
+                        deffered.resolve(data.data);
+                    } else {
+                        deffered.reject();
+                    }
+                }, deffered.reject());
+
+                return deffered.promise;
             }
         };
     });

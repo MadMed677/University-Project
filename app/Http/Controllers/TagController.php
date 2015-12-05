@@ -38,7 +38,16 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tags = $request->input('tags');
+        $result = [];
+
+        foreach ( $tags as $tag ) {
+            $t = Tag::create(['title' => $tag['title']]);
+
+            if ( isset($t) ) $result[] = $t->id;
+        }
+
+        return $result;
     }
 
     /**

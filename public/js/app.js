@@ -84510,6 +84510,29 @@
 	                });
 
 	                return deffered.promise;
+	            },
+
+	            save: function save() {
+	                var tags = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+
+	                if (!_lodash2['default'].isArray(tags)) tags = [tags];
+
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'POST',
+	                    url: '' + url,
+	                    body: { tags: tags }
+	                });
+
+	                request.then(function (data) {
+	                    if (data.status === 200) {
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                }, deffered.reject());
+
+	                return deffered.promise;
 	            }
 	        };
 	    });
