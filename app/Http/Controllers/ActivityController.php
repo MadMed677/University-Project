@@ -150,6 +150,6 @@ class ActivityController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return Activity::where('id', '=', $id)->delete();
     }
 }

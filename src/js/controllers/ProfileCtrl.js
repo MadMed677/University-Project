@@ -1,7 +1,7 @@
 import _                    from 'lodash';
 
 export default (ngModule) =>
-    ngModule.controller('ProfileCtrl', ($scope, UserFactory) => {
+    ngModule.controller('ProfileCtrl', ($scope, UserFactory, ActivitiesFactory) => {
 
         $scope.activities = [];
         $scope.activitiesList = [];
@@ -13,6 +13,15 @@ export default (ngModule) =>
 
         $scope.selectActive = (activity) => {
             if ( !activity.view ) $scope.activeActivity = activity;
+        };
+
+        $scope.remove = (activity) => {
+            ActivitiesFactory.remove(activity).then( data => {
+                // Remove activity from the list
+                _.each($scope.activities, items => {
+                    _.remove(items.items, item => item.category.id == activity.category_id);
+                });
+            });
         };
 
         $scope.$watch('activities', (newActivities) => {
