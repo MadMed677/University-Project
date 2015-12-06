@@ -83804,7 +83804,7 @@
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-primary\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body text-center\">\n        <nav>\n            <ul class=\"pager\">\n                <li class=\"previous\"><a href ng-click=\"prevDay()\"><span aria-hidden=\"true\">←</span></a></li>\n                <span class=\"pager-center\">{{ $root.data | date: 'd MMMM' }}</span>\n                <li class=\"next\"><a href ng-click=\"nextDay()\"><span aria-hidden=\"true\">→</span></a></li>\n            </ul>\n        </nav>\n        <div id=\"chart\"></div>\n    </div>\n</div>\n"
+	module.exports = "<div class=\"box box-primary\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body text-center\">\n        <nav>\n            <ul class=\"pager\">\n                <li class=\"previous\"><a href ng-click=\"prevDay()\"><span aria-hidden=\"true\">←</span></a></li>\n                <span class=\"pager-center\">{{ $root.data | date: 'd MMMM' }}</span>\n                <li class=\"next\"><a href ng-click=\"nextDay()\"><span aria-hidden=\"true\">→</span></a></li>\n            </ul>\n        </nav>\n        <div id=\"chart\"></div>\n    </div>\n</div>"
 
 /***/ },
 /* 31 */
