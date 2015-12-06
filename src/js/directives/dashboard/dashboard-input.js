@@ -26,6 +26,10 @@ export default (ngModule) =>
                     }
                 });
 
+                scope.$watch('activity.tags', (newTags) => {
+                    console.log('newTags: ', newTags);
+                }, true);
+
                 scope.add = () => {
                     let request = { ...scope.activity };
                     request.tags = _.pluck(request.tags, 'id');
@@ -36,8 +40,23 @@ export default (ngModule) =>
                 };
 
                 scope.dynamicPopover = {
-                    templateUrl: 'tagsTemplate.html',
+                    templateUrl: 'locationTemplate.html',
                     title: 'Location'
+                };
+
+                scope.tagsPopover = {
+                    templateUrl: 'tagsTemplate.html',
+                    title: 'Create new tags'
+                };
+
+                scope.submit = () => {
+                    TagFactory.save(scope.tagsPopover.tag).then( () => {
+                        scope.tagsPopover.tag = '';
+                        // Grab updated data from the
+                        TagFactory.all().then( data => {
+                            scope.tagsList = data;
+                        });
+                    });
                 };
 
                 scope.showModalLocation = () => $rootScope.$emit('modalLocation:show');

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Activity;
 use Auth;
 use App\Category;
+use App\Location;
 
 class ActivityController extends Controller
 {
@@ -52,15 +53,24 @@ class ActivityController extends Controller
         $input = $request->all();
         $input['category'] = intval($input['category']);
         $input['hours'] = floatval($input['hours']);
+        if ( !isset($input['location']) ) {
+            $input['location']['id'] = 1;      // PLUG!!!
+        } else {
+            $input['location'] = Location::create([
+                'title' => $input['location']['name'],
+                'latitude' => $input['location']['latitude'],
+                'longitude' => $input['location']['longitude']
+            ]);
+        }
 
 //        return $input;
         $activity = new Activity;
         $activity->category_id = $input['category'];
-        $activity->location_id = 1;
+        $activity->location_id = $input['location']['id'];
         $activity->user_id = Auth::id();
         $activity->title = $input['title'];
         $activity->hours = $input['hours'];
-        $activity->date = \Carbon\Carbon::now();
+        $activity->date = \Carbon\Carbon::now()->addHours(3);
         $activity->category->get();
 
         $activity->save();
@@ -77,34 +87,25 @@ class ActivityController extends Controller
         // Get activity to date
         $activity_to_date = Auth::user()
                     ->activities()
-                    ->where('date', '=', substr(\Carbon\Carbon::now(), 0, 10))
+                    ->where('date', '=', substr(\Carbon\Carbon::now()->addHours(3), 0, 10))
                     ->get();
 
-//        return $activity_to_date;
 
+        $result = [];
         // Copy category object
         foreach ( $category_types as $category) {
-            $total_categories[] = [
-                'category' => $category,
-                'hours' => 0
+            $result[$category->id] = [
+                "hours" => 0,
+                "category" => $category,
             ];
         }
 
         // Calculate total hours
-        foreach ( $category_types as $category ) {
-            foreach ( $activity_to_date as $activity ) {
-                if ( $category->id == $activity->category_id ) {
-                    for ( $i = 0; $i < count($total_categories); $i++ ) {
-                        if ( $total_categories[$i]['category']->id == $activity->category_id ) {
-                            $total_categories[$i]['hours'] += $activity->hours;
-                            break;
-                        }
-                    }
-                }
-            }
+        foreach ( $activity_to_date as $activity ) {
+            $result[$activity->category_id]['hours'] += $activity->hours;
         }
 
-        return $total_categories;
+        return $result;
     }
 
     /**

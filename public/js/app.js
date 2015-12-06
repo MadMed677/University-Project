@@ -63,6 +63,7 @@
 	/* Loading Controllers */__webpack_require__(9)(ngModule);
 	/* Loading Directives */__webpack_require__(17)(ngModule);
 	/* Loading Factories */__webpack_require__(35)(ngModule);
+	/* Loading Filters */__webpack_require__(48)(ngModule);
 
 	ngModule.config(function ($stateProvider, $locationProvider, $httpProvider) {
 
@@ -44920,6 +44921,7 @@
 	exports['default'] = function (ngModule) {
 	    return ngModule.controller('BodyCtrl', function ($scope, $rootScope, UserFactory, $state) {
 	        $rootScope.user = null;
+	        $rootScope.data = new Date();
 
 	        UserFactory.login().then(function (data) {
 	            $rootScope.user = data;
@@ -57434,6 +57436,26 @@
 	        DashboardFactory.getDay().then(function (data) {
 	            $scope.activities = data;
 	        });
+
+	        $scope.prevDay = function () {
+	            var today = $rootScope.data;
+	            var prev = new Date(today.setDate(today.getDate() - 1));
+	            $rootScope.data = prev;
+
+	            DashboardFactory.getDay(prev).then(function (data) {
+	                $scope.activities = data;
+	            });
+	        };
+
+	        $scope.nextDay = function () {
+	            var today = $rootScope.data;
+	            var next = new Date(today.setDate(today.getDate() + 1));
+	            $rootScope.data = next;
+
+	            DashboardFactory.getDay(next).then(function (data) {
+	                $scope.activities = data;
+	            });
+	        };
 	    });
 	};
 
@@ -57453,6 +57475,7 @@
 
 	    __webpack_require__(18)(ngModule);
 	    __webpack_require__(20)(ngModule);
+	    __webpack_require__(50)(ngModule);
 
 	    __webpack_require__(22)(ngModule);
 
@@ -57675,7 +57698,11 @@
 	    return ngModule.directive('pieChart', function (UserFactory, $rootScope, $state) {
 	        return {
 	            restrict: 'E',
-	            scope: { activities: '=' },
+	            scope: {
+	                activities: '=',
+	                prevDay: '&',
+	                nextDay: '&'
+	            },
 	            template: __webpack_require__(30),
 	            link: function link(scope, element) {
 
@@ -83777,7 +83804,7 @@
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-primary\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body text-center\">\n        <div id=\"chart\"></div>\n    </div>\n</div>\n"
+	module.exports = "<div class=\"box box-primary\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body text-center\">\n        <nav>\n            <ul class=\"pager\">\n                <li class=\"previous\"><a href ng-click=\"prevDay()\"><span aria-hidden=\"true\">←</span></a></li>\n                <span class=\"pager-center\">{{ $root.data | date: 'd MMMM' }}</span>\n                <li class=\"next\"><a href ng-click=\"nextDay()\"><span aria-hidden=\"true\">→</span></a></li>\n            </ul>\n        </nav>\n        <div id=\"chart\"></div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 31 */
@@ -83827,6 +83854,10 @@
 	                    }
 	                });
 
+	                scope.$watch('activity.tags', function (newTags) {
+	                    console.log('newTags: ', newTags);
+	                }, true);
+
 	                scope.add = function () {
 	                    var request = _extends({}, scope.activity);
 	                    request.tags = _lodash2['default'].pluck(request.tags, 'id');
@@ -83837,8 +83868,23 @@
 	                };
 
 	                scope.dynamicPopover = {
-	                    templateUrl: 'tagsTemplate.html',
+	                    templateUrl: 'locationTemplate.html',
 	                    title: 'Location'
+	                };
+
+	                scope.tagsPopover = {
+	                    templateUrl: 'tagsTemplate.html',
+	                    title: 'Create new tags'
+	                };
+
+	                scope.submit = function () {
+	                    TagFactory.save(scope.tagsPopover.tag).then(function () {
+	                        scope.tagsPopover.tag = '';
+	                        // Grab updated data from the
+	                        TagFactory.all().then(function (data) {
+	                            scope.tagsList = data;
+	                        });
+	                    });
 	                };
 
 	                scope.showModalLocation = function () {
@@ -83855,7 +83901,7 @@
 /* 32 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\"\n                    ng-class=\"{ 'success': activity.location.latitude }\"\n                    ng-click=\"showModalLocation()\"\n                    uib-popover-template=\"dynamicPopover.templateUrl\"\n                    popover-title=\"{{ dynamicPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-enable=\"{{ showLocationTooltip }}\"\n                    popover-trigger=\"mouseenter\">\n                <i class=\"fa fa-map-marker\"></i>\n            </button>\n            <button class=\"btn btn-box-tool\"><i class=\"fa fa-tags\"></i></button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<script type=\"text/ng-template\" id=\"tagsTemplate.html\">\n    <div>{{ activity.location.name }}</div>\n</script>"
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\"\n                    ng-class=\"{ 'success': activity.location.latitude }\"\n                    ng-click=\"showModalLocation()\"\n                    uib-popover-template=\"dynamicPopover.templateUrl\"\n                    popover-title=\"{{ dynamicPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-enable=\"{{ showLocationTooltip }}\"\n                    popover-trigger=\"mouseenter\">\n                <i class=\"fa fa-map-marker\"></i>\n            </button>\n            <button class=\"btn btn-box-tool tags\"\n                    ng-class=\"{ 'success': activity.tags.length }\"\n                    uib-popover-template=\"tagsPopover.templateUrl\"\n                    popover-title=\"{{ tagsPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-trigger=\"click\">\n                <i class=\"fa fa-tags\"></i>\n            </button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList | propsFilter: { title: $select.search }\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<script type=\"text/ng-template\" id=\"locationTemplate.html\">\n    <div>{{ activity.location.name }}</div>\n</script>\n\n<script type=\"text/ng-template\" id=\"tagsTemplate.html\">\n    <div>\n        <input type=\"text\" class=\"form-control\" placeholder=\"Tags\" ng-model=\"tagsPopover.tag\" input-on-enter=\"submit()\">\n    </div>\n</script>\n"
 
 /***/ },
 /* 33 */
@@ -84510,6 +84556,33 @@
 	                });
 
 	                return deffered.promise;
+	            },
+
+	            save: function save() {
+	                var tags = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+
+	                if (!_lodash2['default'].isArray(tags)) tags = [tags];
+
+	                var deffered = $q.defer();
+	                var request = new _helpers_apiJs2['default'].http({
+	                    method: 'POST',
+	                    url: '' + url,
+	                    body: { tags: tags }
+	                });
+
+	                request.then(function (data) {
+	                    console.log('here: ', data);
+	                    if (data.status === 200) {
+	                        console.log('and here: ', data);
+	                        deffered.resolve(data.data);
+	                    } else {
+	                        deffered.reject();
+	                    }
+	                }, function () {
+	                    return deffered.reject();
+	                });
+
+	                return deffered.promise;
 	            }
 	        };
 	    });
@@ -84521,7 +84594,7 @@
 /* 44 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input activities=\"activities\" activity=\"activity\"></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n\n<modal-location activity=\"activity\"></modal-location>"
+	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input activities=\"activities\" activity=\"activity\"></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\" prev-day=\"prevDay()\" next-day=\"nextDay()\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n\n<modal-location activity=\"activity\"></modal-location>"
 
 /***/ },
 /* 45 */
@@ -84540,6 +84613,105 @@
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"container\">\n    <h1>This is login page</h1>\n</div>"
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	exports['default'] = function (ngModule) {
+
+	    __webpack_require__(49)(ngModule);
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _lodash = __webpack_require__(14);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.filter('propsFilter', function () {
+	        return function (items, props) {
+	            var out = [];
+
+	            if (_angular2['default'].isArray(items)) {
+	                items.forEach(function (item) {
+	                    var itemMatches = false;
+
+	                    var keys = Object.keys(props);
+	                    for (var i = 0; i < keys.length; i++) {
+	                        var prop = keys[i];
+	                        var text = props[prop].toLowerCase();
+	                        if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+	                            itemMatches = true;
+	                            break;
+	                        }
+	                    }
+
+	                    if (itemMatches) {
+	                        out.push(item);
+	                    }
+	                });
+	            } else {
+	                // Let the output be the input untouched
+	                out = items;
+	            }
+
+	            return out;
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 50 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	exports['default'] = function (ngModule) {
+	    return ngModule.directive('inputOnEnter', function () {
+	        return function (scope, element, attrs) {
+	            element.bind('keydown keypress', function (event) {
+	                if (event.which == 13) {
+	                    scope.$apply(function () {
+	                        return scope.$eval(attrs.inputOnEnter);
+	                    });
+	                    event.preventDefault();
+	                }
+	            });
+	        };
+	    });
+	};
+
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);
