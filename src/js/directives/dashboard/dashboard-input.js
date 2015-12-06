@@ -52,7 +52,10 @@ export default (ngModule) =>
                 scope.submit = () => {
                     TagFactory.save(scope.tagsPopover.tag).then( () => {
                         // Grab updated data from the
-                        TagFactory.all().then( data => scope.tagsList = data );
+                        TagFactory.all().then( data => {
+                            scope.tagsList = data;
+                            scope.tagsPopover.tag = '';
+                        });
                     });
                 };
 

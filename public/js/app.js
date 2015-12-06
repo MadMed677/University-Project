@@ -83856,7 +83856,8 @@
 	                    TagFactory.save(scope.tagsPopover.tag).then(function () {
 	                        // Grab updated data from the
 	                        TagFactory.all().then(function (data) {
-	                            return scope.tagsList = data;
+	                            scope.tagsList = data;
+	                            scope.tagsPopover.tag = '';
 	                        });
 	                    });
 	                };
