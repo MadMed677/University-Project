@@ -14,6 +14,7 @@ const ngModule                  = angular.module('university', [
 /* Loading Controllers */   require('./controllers/index.js')(ngModule);
 /* Loading Directives */    require('./directives/index.js')(ngModule);
 /* Loading Factories */     require('./factories/index.js')(ngModule);
+/* Loading Filters */       require('./filters/index.js')(ngModule);
 
 ngModule.config( ($stateProvider, $locationProvider, $httpProvider) => {
 

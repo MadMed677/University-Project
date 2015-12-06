@@ -12,17 +12,9 @@ export default (ngModule) =>
 
                 scope.location = {};
 
-                // let map = null;
-                // function update(center) {
-                //     console.log('ymaps: ', ymaps);
-                //     map = new ymaps.Map('map', {
-                //         center: center,
-                //         zoom: 15
-                //     });
-                // }
-
                 let map = null,
                     placemark = null;
+
                 ymaps.ready( () => {
                     map = new ymaps.Map('map', {
                         center: [0,0],
@@ -35,7 +27,6 @@ export default (ngModule) =>
                     });
                 });
 
-                console.log('activity: ', scope.activity);
                 scope.$watch('activity', (newActivity) => {
                     if ( !_.isEmpty(newActivity) ) {
                         console.log('newActivity: ', newActivity);
@@ -57,7 +48,6 @@ export default (ngModule) =>
 
                         // Add new placemark to the map
                         map.geoObjects.add(placemark);
-
                     }
                 });
             }

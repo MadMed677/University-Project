@@ -1,6 +1,26 @@
 <div class="box box-default">
     <div class="box-header">
         <h3 class="box-title">Input New Activity</h3>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool"
+                    ng-class="{ 'success': activity.location.latitude }"
+                    ng-click="showModalLocation()"
+                    uib-popover-template="dynamicPopover.templateUrl"
+                    popover-title="{{ dynamicPopover.title }}"
+                    popover-placement="right"
+                    popover-enable="{{ showLocationTooltip }}"
+                    popover-trigger="mouseenter">
+                <i class="fa fa-map-marker"></i>
+            </button>
+            <button class="btn btn-box-tool tags"
+                    ng-class="{ 'success': activity.tags.length }"
+                    uib-popover-template="tagsPopover.templateUrl"
+                    popover-title="{{ tagsPopover.title }}"
+                    popover-placement="right"
+                    popover-trigger="click">
+                <i class="fa fa-tags"></i>
+            </button>
+        </div>
     </div>
     <div class="box-body">
         <div class="row">
@@ -18,7 +38,7 @@
             <div class="col-sm-3">
                 <ui-select multiple ng-model="activity.tags" theme="select2">
                     <ui-select-match placeholder="Select tags...">{{ $item.title }}</ui-select-match>
-                    <ui-select-choices repeat="tag in tagsList">{{ tag.title }}</ui-select-choices>
+                    <ui-select-choices repeat="tag in tagsList | propsFilter: { title: $select.search }">{{ tag.title }}</ui-select-choices>
                 </ui-select>
             </div>
             <div class="col-sm-1 text-center">
@@ -27,3 +47,13 @@
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="locationTemplate.html">
+    <div>{{ activity.location.name }}</div>
+</script>
+
+<script type="text/ng-template" id="tagsTemplate.html">
+    <div>
+        <input type="text" class="form-control" placeholder="Tags" ng-model="tagsPopover.tag" input-on-enter="submit()">
+    </div>
+</script>

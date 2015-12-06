@@ -1,6 +1,7 @@
 export default (ngModule) =>
     ngModule.controller('BodyCtrl', ($scope, $rootScope, UserFactory, $state) => {
         $rootScope.user = null;
+        $rootScope.data = new Date();
 
         UserFactory.login().then( data => {
             $rootScope.user = data;
