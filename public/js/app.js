@@ -45020,7 +45020,12 @@
 
 	        $scope.remove = function (activity) {
 	            ActivitiesFactory.remove(activity).then(function (data) {
-	                console.log('removed ', data);
+	                // Remove activity from the list
+	                _lodash2['default'].each($scope.activities, function (items) {
+	                    _lodash2['default'].remove(items.items, function (item) {
+	                        return item.category.id == activity.category_id;
+	                    });
+	                });
 	            });
 	        };
 

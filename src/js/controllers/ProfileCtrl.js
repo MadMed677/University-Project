@@ -17,7 +17,10 @@ export default (ngModule) =>
 
         $scope.remove = (activity) => {
             ActivitiesFactory.remove(activity).then( data => {
-                console.log('removed ', data);
+                // Remove activity from the list
+                _.each($scope.activities, items => {
+                    _.remove(items.items, item => item.category.id == activity.category_id);
+                });
             });
         };
 
