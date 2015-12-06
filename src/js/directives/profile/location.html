@@ -1,5 +1,9 @@
 <div class="box-header">
-    <h3 class="box-title">Location: {{ activity.location['title'] }} {{ activity.date }}</h3>
+    <h3 class="box-title">Location: {{ activity.location['title'] }}</h3>
+    <div class="box-tools pull-right" ng-if="activity.date">
+        <i class="fa fa-clock-o"></i>
+        <span>{{ activity.date | date: 'd MMMM' }}</span>
+    </div>
 </div>
 <div class="box-body">
 
