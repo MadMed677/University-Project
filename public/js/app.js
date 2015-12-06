@@ -44921,6 +44921,7 @@
 	exports['default'] = function (ngModule) {
 	    return ngModule.controller('BodyCtrl', function ($scope, $rootScope, UserFactory, $state) {
 	        $rootScope.user = null;
+	        $rootScope.data = new Date();
 
 	        UserFactory.login().then(function (data) {
 	            $rootScope.user = data;
@@ -57435,6 +57436,26 @@
 	        DashboardFactory.getDay().then(function (data) {
 	            $scope.activities = data;
 	        });
+
+	        $scope.prevDay = function () {
+	            var today = $rootScope.data;
+	            var prev = new Date(today.setDate(today.getDate() - 1));
+	            $rootScope.data = prev;
+
+	            DashboardFactory.getDay(prev).then(function (data) {
+	                $scope.activities = data;
+	            });
+	        };
+
+	        $scope.nextDay = function () {
+	            var today = $rootScope.data;
+	            var next = new Date(today.setDate(today.getDate() + 1));
+	            $rootScope.data = next;
+
+	            DashboardFactory.getDay(next).then(function (data) {
+	                $scope.activities = data;
+	            });
+	        };
 	    });
 	};
 
@@ -57677,7 +57698,11 @@
 	    return ngModule.directive('pieChart', function (UserFactory, $rootScope, $state) {
 	        return {
 	            restrict: 'E',
-	            scope: { activities: '=' },
+	            scope: {
+	                activities: '=',
+	                prevDay: '&',
+	                nextDay: '&'
+	            },
 	            template: __webpack_require__(30),
 	            link: function link(scope, element) {
 
@@ -83779,7 +83804,7 @@
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-primary\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body text-center\">\n        <div id=\"chart\"></div>\n    </div>\n</div>\n"
+	module.exports = "<div class=\"box box-primary\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body text-center\">\n        <nav>\n            <ul class=\"pager\">\n                <li class=\"previous\"><a href ng-click=\"prevDay()\"><span aria-hidden=\"true\">←</span></a></li>\n                <span class=\"pager-center\">{{ $root.data | date: 'd MMMM' }}</span>\n                <li class=\"next\"><a href ng-click=\"nextDay()\"><span aria-hidden=\"true\">→</span></a></li>\n            </ul>\n        </nav>\n        <div id=\"chart\"></div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 31 */
@@ -83854,10 +83879,10 @@
 
 	                scope.submit = function () {
 	                    TagFactory.save(scope.tagsPopover.tag).then(function () {
+	                        scope.tagsPopover.tag = '';
 	                        // Grab updated data from the
 	                        TagFactory.all().then(function (data) {
 	                            scope.tagsList = data;
-	                            scope.tagsPopover.tag = '';
 	                        });
 	                    });
 	                };
@@ -84569,7 +84594,7 @@
 /* 44 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input activities=\"activities\" activity=\"activity\"></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n\n<modal-location activity=\"activity\"></modal-location>"
+	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input activities=\"activities\" activity=\"activity\"></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\" prev-day=\"prevDay()\" next-day=\"nextDay()\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n\n<modal-location activity=\"activity\"></modal-location>"
 
 /***/ },
 /* 45 */

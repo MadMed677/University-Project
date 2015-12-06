@@ -6,7 +6,11 @@ export default (ngModule) =>
     ngModule.directive('pieChart', (UserFactory, $rootScope, $state) => {
         return {
             restrict: 'E',
-            scope: { activities: '=' },
+            scope: {
+                activities: '=',
+                prevDay: '&',
+                nextDay: '&'
+            },
             template: require('./pie-chart.html'),
             link: function(scope, element) {
 
