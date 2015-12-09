@@ -13,12 +13,18 @@
 
 Route::get('/', function () { return view('index'); });
 
-Route::resource('/api/v1/activities', 'ActivityController');
-Route::resource('/api/v1/auth', 'UserController');
-Route::resource('/api/v1/tags', 'TagController');
+Route::get('/api/v1/activities', 'ActivityController@index');
+Route::post('/api/v1/activities', 'ActivityController@store');
+Route::delete('/api/v1/activities/{id}', 'ActivityController@destroy');
 
+Route::get('/api/v1/auth', 'UserController@index');
+Route::post('/api/v1/auth', 'UserController@store');
 Route::get('/api/v1/user/logout', 'UserController@logout');
 Route::get('/api/v1/user/profile', 'UserController@profile');
+
+Route::get('/api/v1/tags', 'TagController@index');
+Route::post('/api/v1/tags', 'TagController@store');
+
 Route::get('/api/v1/categories', 'CategoryController@index');
 
-Route::resource('/api/v1/dashboard/{date?}', 'DashboardController');
+Route::get('/api/v1/dashboard/{date?}', 'DashboardController@index');
