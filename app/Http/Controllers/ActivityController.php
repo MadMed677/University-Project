@@ -39,6 +39,9 @@ class ActivityController extends Controller
      *
      * @param int $request->category The category id
      * @param float $request->hours The count of hours
+     * @param varchar $request->location['name'] Location name
+     * @param float $request->location['latitude'] Location latitude
+     * @param float $request->location['longitude'] Location longitude
      * @return array of all categories with activities
      */
     public function store(Request $request)
@@ -104,7 +107,7 @@ class ActivityController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id The activity id
-     * @return Deleted user
+     * @return Deleted activity
      */
     public function destroy($id)
     {
