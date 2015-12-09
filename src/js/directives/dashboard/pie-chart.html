@@ -7,7 +7,7 @@
             <ul class="pager">
                 <li class="previous"><a href ng-click="prevDay()"><span aria-hidden="true">←</span></a></li>
                 <span class="pager-center">{{ $root.data | date: 'd MMMM' }}</span>
-                <li class="next"><a href ng-click="nextDay()"><span aria-hidden="true">→</span></a></li>
+                <li class="next" ng-class="{ 'disabled': disabled }"><a href ng-click="nextDay()"><span aria-hidden="true">→</span></a></li>
             </ul>
         </nav>
         <div id="chart"></div>

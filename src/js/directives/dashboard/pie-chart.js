@@ -9,7 +9,8 @@ export default (ngModule) =>
             scope: {
                 activities: '=',
                 prevDay: '&',
-                nextDay: '&'
+                nextDay: '&',
+                disabled: '='
             },
             template: require('./pie-chart.html'),
             link: function(scope, element) {

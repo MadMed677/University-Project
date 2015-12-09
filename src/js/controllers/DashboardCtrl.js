@@ -3,6 +3,9 @@ export default (ngModule) =>
 
         $scope.activities = [];
         $scope.activity = {};
+        $scope.disabled = true;
+
+        const now = new Date();
 
         DashboardFactory.getDay().then( data => {
             $scope.activities = data;
@@ -12,6 +15,7 @@ export default (ngModule) =>
             let today = $rootScope.data;
             const prev = new Date( today.setDate( today.getDate()-1) );
             $rootScope.data = prev;
+            $scope.disabled = false;
 
             DashboardFactory.getDay(prev).then( data => {
                 $scope.activities = data;
@@ -19,9 +23,17 @@ export default (ngModule) =>
         };
 
         $scope.nextDay = () => {
+            if ( $scope.disabled ) return;
+
             let today = $rootScope.data;
             const next = new Date( today.setDate( today.getDate()+1) );
             $rootScope.data = next;
+
+            console.log('nextDate: ', next.getDate());
+            console.log('todayDate: ', today.getDate());
+            if ( next.getMonth() == now.getMonth() && next.getDate() == now.getDate() ) {
+                $scope.disabled = true;
+            }
 
             DashboardFactory.getDay(next).then( data => {
                 $scope.activities = data;

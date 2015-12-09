@@ -57443,6 +57443,9 @@
 
 	        $scope.activities = [];
 	        $scope.activity = {};
+	        $scope.disabled = true;
+
+	        var now = new Date();
 
 	        DashboardFactory.getDay().then(function (data) {
 	            $scope.activities = data;
@@ -57452,6 +57455,7 @@
 	            var today = $rootScope.data;
 	            var prev = new Date(today.setDate(today.getDate() - 1));
 	            $rootScope.data = prev;
+	            $scope.disabled = false;
 
 	            DashboardFactory.getDay(prev).then(function (data) {
 	                $scope.activities = data;
@@ -57459,9 +57463,17 @@
 	        };
 
 	        $scope.nextDay = function () {
+	            if ($scope.disabled) return;
+
 	            var today = $rootScope.data;
 	            var next = new Date(today.setDate(today.getDate() + 1));
 	            $rootScope.data = next;
+
+	            console.log('nextDate: ', next.getDate());
+	            console.log('todayDate: ', today.getDate());
+	            if (next.getMonth() == now.getMonth() && next.getDate() == now.getDate()) {
+	                $scope.disabled = true;
+	            }
 
 	            DashboardFactory.getDay(next).then(function (data) {
 	                $scope.activities = data;
@@ -57526,7 +57538,7 @@
 /* 19 */
 /***/ function(module, exports) {
 
-	module.exports = "<aside class=\"main-sidebar\">\n    <section class=\"sidebar\">\n        <ul class=\"sidebar-menu\">\n            <li class=\"header\">Главное меню</li>\n\n            <li ui-sref-active=\"active\"><a href ui-sref=\"dashboard\"><i class=\"fa fa-home\"></i> <span>Dashboard</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"list\"><i class=\"fa fa-home\"></i> <span>List</span></a></li>\n            <li ui-sref-active=\"active\"><a href ui-sref=\"profile\"><i class=\"fa fa-user\"></i> <span>Profile</span></a></li>\n        </ul>\n    </section>\n</aside>\n"
+	module.exports = "<aside class=\"main-sidebar\">\n    <section class=\"sidebar\">\n        <ul class=\"sidebar-menu\">\n            <li class=\"header\">Главное меню</li>\n\n            <li ui-sref-active=\"active\"><a href ui-sref=\"dashboard\"><i class=\"fa fa-home\"></i> <span>Dashboard</span></a></li>\n            <!--<li ui-sref-active=\"active\"><a href ui-sref=\"list\"><i class=\"fa fa-home\"></i> <span>List</span></a></li>-->\n            <li ui-sref-active=\"active\"><a href ui-sref=\"profile\"><i class=\"fa fa-user\"></i> <span>Profile</span></a></li>\n        </ul>\n    </section>\n</aside>\n"
 
 /***/ },
 /* 20 */
@@ -57712,7 +57724,8 @@
 	            scope: {
 	                activities: '=',
 	                prevDay: '&',
-	                nextDay: '&'
+	                nextDay: '&',
+	                disabled: '='
 	            },
 	            template: __webpack_require__(30),
 	            link: function link(scope, element) {
@@ -83815,7 +83828,7 @@
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-primary\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body text-center\">\n        <nav>\n            <ul class=\"pager\">\n                <li class=\"previous\"><a href ng-click=\"prevDay()\"><span aria-hidden=\"true\">←</span></a></li>\n                <span class=\"pager-center\">{{ $root.data | date: 'd MMMM' }}</span>\n                <li class=\"next\"><a href ng-click=\"nextDay()\"><span aria-hidden=\"true\">→</span></a></li>\n            </ul>\n        </nav>\n        <div id=\"chart\"></div>\n    </div>\n</div>"
+	module.exports = "<div class=\"box box-primary\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Pie Chart</h3>\n    </div>\n    <div class=\"box-body text-center\">\n        <nav>\n            <ul class=\"pager\">\n                <li class=\"previous\"><a href ng-click=\"prevDay()\"><span aria-hidden=\"true\">←</span></a></li>\n                <span class=\"pager-center\">{{ $root.data | date: 'd MMMM' }}</span>\n                <li class=\"next\" ng-class=\"{ 'disabled': disabled }\"><a href ng-click=\"nextDay()\"><span aria-hidden=\"true\">→</span></a></li>\n            </ul>\n        </nav>\n        <div id=\"chart\"></div>\n    </div>\n</div>"
 
 /***/ },
 /* 31 */
@@ -83912,7 +83925,7 @@
 /* 32 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\"\n                    ng-class=\"{ 'success': activity.location.latitude }\"\n                    ng-click=\"showModalLocation()\"\n                    uib-popover-template=\"dynamicPopover.templateUrl\"\n                    popover-title=\"{{ dynamicPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-enable=\"{{ showLocationTooltip }}\"\n                    popover-trigger=\"mouseenter\">\n                <i class=\"fa fa-map-marker\"></i>\n            </button>\n            <button class=\"btn btn-box-tool tags\"\n                    ng-class=\"{ 'success': activity.tags.length }\"\n                    uib-popover-template=\"tagsPopover.templateUrl\"\n                    popover-title=\"{{ tagsPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-trigger=\"click\">\n                <i class=\"fa fa-tags\"></i>\n            </button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-5\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"number\" class=\"form-control\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList | propsFilter: { title: $select.search }\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<script type=\"text/ng-template\" id=\"locationTemplate.html\">\n    <div>{{ activity.location.name }}</div>\n</script>\n\n<script type=\"text/ng-template\" id=\"tagsTemplate.html\">\n    <div>\n        <input type=\"text\" class=\"form-control\" placeholder=\"Tags\" ng-model=\"tagsPopover.tag\" input-on-enter=\"submit()\">\n    </div>\n</script>\n"
+	module.exports = "<div class=\"box box-default\">\n    <div class=\"box-header\">\n        <h3 class=\"box-title\">Input New Activity</h3>\n        <div class=\"box-tools pull-right\">\n            <button class=\"btn btn-box-tool\"\n                    ng-class=\"{ 'success': activity.location.latitude }\"\n                    ng-click=\"showModalLocation()\"\n                    uib-popover-template=\"dynamicPopover.templateUrl\"\n                    popover-title=\"{{ dynamicPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-enable=\"{{ showLocationTooltip }}\"\n                    popover-trigger=\"mouseenter\">\n                <i class=\"fa fa-map-marker\"></i>\n            </button>\n            <button class=\"btn btn-box-tool tags\"\n                    ng-class=\"{ 'success': activity.tags.length }\"\n                    uib-popover-template=\"tagsPopover.templateUrl\"\n                    popover-title=\"{{ tagsPopover.title }}\"\n                    popover-placement=\"right\"\n                    popover-trigger=\"click\">\n                <i class=\"fa fa-tags\"></i>\n            </button>\n        </div>\n    </div>\n    <div class=\"box-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-2\">\n                <select name=\"categories\" id=\"categories\" ng-model=\"activity.category\" class=\"form-control\">\n                    <option ng-repeat=\"category in categories\" value=\"{{ category.id }}\">{{ category.title }}</option>\n                </select>\n            </div>\n            <div class=\"col-sm-4\">\n                <input type=\"text\" class=\"form-control\" ng-model=\"activity.title\" placeholder=\"Input activity name\">\n            </div>\n            <div class=\"col-sm-1\">\n                <input type=\"text\" class=\"form-control\" ng-style=\"{ 'padding': '0 4px', 'text-align': 'center' }\" ng-model=\"activity.hours\" placeholder=\"3\">\n            </div>\n            <div class=\"col-sm-3\">\n                <ui-select multiple ng-model=\"activity.tags\" theme=\"select2\">\n                    <ui-select-match placeholder=\"Select tags...\">{{ $item.title }}</ui-select-match>\n                    <ui-select-choices repeat=\"tag in tagsList | propsFilter: { title: $select.search }\">{{ tag.title }}</ui-select-choices>\n                </ui-select>\n            </div>\n            <div class=\"col-sm-1 text-center\">\n                <button class=\"btn btn-primary\" ng-click=\"add()\">Add</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<script type=\"text/ng-template\" id=\"locationTemplate.html\">\n    <div>{{ activity.location.name }}</div>\n</script>\n\n<script type=\"text/ng-template\" id=\"tagsTemplate.html\">\n    <div>\n        <input type=\"text\" class=\"form-control\" placeholder=\"Tags\" ng-model=\"tagsPopover.tag\" input-on-enter=\"submit()\">\n    </div>\n</script>\n"
 
 /***/ },
 /* 33 */
@@ -84625,7 +84638,7 @@
 /* 44 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input activities=\"activities\" activity=\"activity\"></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\" prev-day=\"prevDay()\" next-day=\"nextDay()\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n\n<modal-location activity=\"activity\"></modal-location>"
+	module.exports = "<section class=\"content-header\">\n    <h1>Dashboard</h1>\n</section>\n\n<section class=\"content\">\n\n    <div class=\"row\">\n        <div class=\"col-md-8\">\n            <dashboard-input activities=\"activities\" activity=\"activity\"></dashboard-input>\n        </div>\n        <div class=\"col-md-4\">\n            <pie-chart activities=\"activities\" prev-day=\"prevDay()\" next-day=\"nextDay()\" disabled=\"disabled\"></pie-chart>\n        </div>\n    </div>\n\n</section>\n\n<modal-location activity=\"activity\"></modal-location>"
 
 /***/ },
 /* 45 */
