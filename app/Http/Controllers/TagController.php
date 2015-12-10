@@ -11,7 +11,7 @@ use App\Tag;
 class TagController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the tags.
      *
      * @return \Illuminate\Http\Response
      */
@@ -31,10 +31,10 @@ class TagController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Save tags array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  array $request->tags Get tags array to save them
+     * @return Return saved tags
      */
     public function store(Request $request)
     {

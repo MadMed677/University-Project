@@ -11,9 +11,9 @@ use App\Http\Controllers\Controller;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the categories.
      *
-     * @return \Illuminate\Http\Response
+     * @return array All categories
      */
     public function index()
     {
