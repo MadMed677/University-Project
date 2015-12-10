@@ -13,8 +13,9 @@ use App\Http\Controllers\Controller;
 class DashboardController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the dashboard.
      *
+     * @param date $date get date of activity and save them
      * @return \Illuminate\Http\Response
      */
     public function index($date = null)

@@ -13,19 +13,29 @@ use App\Http\Controllers\Controller;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the users.
      *
-     * @return \Illuminate\Http\Response
+     * @return array $user return user auth
      */
     public function index()
     {
         return Auth::user();
     }
 
+    /**
+     * Logout user
+     *
+     * @return mixed
+     */
     public function logout() {
         return Auth::logout();
     }
 
+    /**
+     * Get only 30 user activities and order them by 'desc'
+     *
+     * @return array of
+     */
     public function profile() {
 
         // Get activities for User
@@ -81,8 +91,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  string $request->login get user login
+     * @param  string $request->password get user password
+     *
+     * @return Return Auth User
      */
     public function store(Request $request)
     {
